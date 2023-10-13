@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { Client, GatewayIntentBits } from 'discord.js';
+import messageHandler from './messageHandler';
 dotenv.config();
 
 const bot = async () => {
@@ -13,16 +14,34 @@ const bot = async () => {
   });
 
   client.on('ready', () => {
-    console.log('Discord bot is ready');
+    console.log('Discord bot is ready.');
   });
 
-  if (token) {
-    try {
-      await client.login(token);
-    } catch {
-      console.log('Error: could not login to Discord!');
+  client.on('messageCreate', async (msg) => {
+    if (msg.author?.id !== client.user?.id) {
+      try {
+        const channel = client.channels.cache.get(msg.channelId);
+        if (!channel)
+          throw new Error('Cannot find channel for incoming message.');
+        if (!channel.isTextBased())
+          throw new Error('Channel is not text based.');
+        await messageHandler(msg, channel);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error('Error: ' + error.message);
+        } else console.error(error);
+      }
     }
-  } else console.log('Error: no Discord token provided!');
+  });
+
+  try {
+    if (!token) throw new Error('No Discord token provided.');
+    await client.login(token);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Error: ' + error.message);
+    } else console.error(error);
+  }
 };
 
 export default bot;
