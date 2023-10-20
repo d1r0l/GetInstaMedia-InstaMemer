@@ -3,27 +3,31 @@ import axios from 'axios';
 import _ from 'lodash';
 import sodium from 'libsodium-wrappers';
 import crypto from 'node:crypto';
+import {
+  Cookies,
+  updateCookiesFromSetHeader,
+  getCookieHeader,
+} from './cookiesParser';
 dotenv.config();
 
-const baseurl = 'https://www.instagram.com/api/v1';
+const baseUrl = 'https://www.instagram.com';
+const apiUrl = 'https://www.instagram.com/api/v1';
 const userAgent =
   'Mozilla/5.0 (iPhone; CPU iPhone OS 14_1 like Mac OS X) ' +
   'AppleWebKit/605.1.15 (KHTML, like Gecko) ' +
   'Mobile/15E148 Instagram 142.0.0.22.109 ' +
   '(iPhone12,5; iOS 14_1; en_US; en-US; scale=3.00; 1242x2688; 214888322) NW/1';
+let cookies: Cookies = {};
 
-const getPublicKeysData = async (): Promise<
-  | {
-      csrfToken: string;
-      publicKeyId: string;
-      publicKey: string;
-      publicKeyVersion: string;
-    }
-  | undefined
-> => {
+const getPublicKeysData = async (): Promise<{
+  csrfToken: string;
+  publicKeyId: number;
+  publicKey: string;
+  publicKeyVersion: number;
+}> => {
   const res = await axios({
     method: 'GET',
-    url: `${baseurl}/web/data/shared_data/`,
+    url: `${apiUrl}/web/data/shared_data/`,
     headers: {
       'user-agent': userAgent,
     },
@@ -47,24 +51,25 @@ const getPublicKeysData = async (): Promise<
     _.isString(res.data.encryption.version)
   ) {
     const csrfToken = res.data.config.csrf_token;
-    const publicKeyId = res.data.encryption.key_id;
+    const publicKeyId = Number(res.data.encryption.key_id);
+    if (isNaN(publicKeyId)) throw new Error('Invalid public key id.');
     const publicKey = res.data.encryption.public_key;
-    const publicKeyVersion = res.data.encryption.version;
+    const publicKeyVersion = Number(res.data.encryption.version);
+    if (isNaN(publicKeyVersion)) throw new Error('Invalid public key version.');
+
     return {
       csrfToken,
       publicKeyId,
       publicKey,
       publicKeyVersion,
     };
-  } else {
-    return undefined;
-  }
+  } else throw new Error('Cannot get public keys data.');
 };
 
 const encryptPassword = async (
-  pKeyId: string,
+  pKeyId: number,
   pKey: string,
-  pKeyVersion: string,
+  pKeyVersion: number,
   pass: string,
 ): Promise<string> => {
   const time = Math.floor(Date.now() / 1000).toString();
@@ -110,11 +115,31 @@ const encryptPassword = async (
   return result;
 };
 
-const getIgCookies = async () => {
+const isCookiesValid = async (): Promise<boolean> => {
+  if (!cookies) return false;
+
+  const res = await axios({
+    url: `${apiUrl}/accounts/current_user/`,
+    method: 'GET',
+    headers: {
+      'User-Agent': userAgent,
+      Cookie: getCookieHeader(cookies),
+    },
+    validateStatus: () => true,
+  });
+
+  if (res.headers['set-cookie'])
+    cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
+
+  if (_.isObject(res.data) && 'status' in res.data && res.data.status === 'ok')
+    return true;
+  else return false;
+};
+
+const getIgCookies = async (): Promise<void> => {
   if (!process.env.IG_USERNAME || !process.env.IG_PASSWORD)
     throw new Error('No Instagram username or password provided.');
 
-  const url = `${baseurl}/web/accounts/login/ajax/`;
   const keys = await getPublicKeysData();
   if (!keys) throw new Error('Cannot get public keys data.');
 
@@ -126,7 +151,7 @@ const getIgCookies = async () => {
   );
 
   const req = {
-    url: url,
+    url: `${apiUrl}/web/accounts/login/ajax/`,
     method: 'POST',
     headers: {
       'User-Agent': userAgent,
@@ -145,10 +170,53 @@ const getIgCookies = async () => {
   };
 
   const res = await axios(req);
-  if (res.status !== 200) throw new Error('Cannot get Instagram cookies.');
+  if (res.status !== 200)
+    throw new Error(`Cookies request status ${res.status}.`);
+  if (res.data.status === 'fail')
+    throw new Error('Response message: ' + res.data.message);
   if (!res.headers['set-cookie']) throw new Error('Cookies not found.');
-  const cookies = res.headers['set-cookie'];
-  console.log(cookies);
+  cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
 };
 
-export default getIgCookies;
+const getPostData = async (postShortCode: string): Promise<object> => {
+  for (let i = 0; i < 2; i++) {
+    if (await isCookiesValid()) break;
+    await getIgCookies();
+  }
+
+  if (!postShortCode || postShortCode.length !== 11)
+    throw new Error('Invalid post short code.');
+
+  const res = await axios({
+    url: `${baseUrl}/p/${postShortCode}/`,
+    method: 'GET',
+    params: {
+      __a: 1,
+      __d: 'dis',
+    },
+    headers: {
+      'User-Agent': userAgent,
+      Cookie: getCookieHeader(cookies),
+    },
+    validateStatus: () => true,
+  });
+
+  if (res.status !== 200)
+    throw new Error(`Post data request status ${res.status}.`);
+  if ('items' in res.data === false)
+    throw new Error('Post response is invalid.');
+  if (_.isArray(res.data.items) && res.data.items.length === 0)
+    throw new Error('Post have no items.');
+  if (res.headers['set-cookie'])
+    cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
+  if (_.isObject(res.data.items[0])) return res.data.items[0];
+  else throw new Error('Post data is not an array.');
+};
+
+const igAgent = {
+  isCookiesValid,
+  getIgCookies,
+  getPostData,
+};
+
+export default igAgent;
