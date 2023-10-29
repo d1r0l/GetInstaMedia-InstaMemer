@@ -21,8 +21,10 @@ const userAgent =
   '(iPhone12,5; iOS 14_1; en_US; en-US; scale=3.00; 1242x2688; 214888322) NW/1';
 let cookies: Cookies = {};
 if (process.env.ENVIROMENT === 'development') {
-  if (fs.existsSync('cookies.json'))
-    cookies = JSON.parse(fs.readFileSync('cookies.json', 'utf8')) as Cookies;
+  if (fs.existsSync('cookies/igCookies.json'))
+    cookies = JSON.parse(
+      fs.readFileSync('cookies/igCookies.json', 'utf8'),
+    ) as Cookies;
 }
 
 const getPublicKeysData = async (): Promise<{
@@ -183,7 +185,10 @@ const getIgCookies = async (): Promise<void> => {
   if (!res.headers['set-cookie']) throw new Error('Cookies not found.');
   cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
   if (process.env.ENVIROMENT === 'development')
-    fs.writeFileSync('cookies.json', JSON.stringify(cookies, null, 2));
+    fs.writeFileSync(
+      'cookies/igCookies.json',
+      JSON.stringify(cookies, null, 2),
+    );
 };
 
 const getPostData = async (postShortCode: string): Promise<PostData> => {
