@@ -8,7 +8,11 @@ import {
   updateCookiesFromSetHeader,
   getCookieHeader,
 } from './cookiesParser';
+import { PostData, isPostData } from './igAgentTypes';
 dotenv.config();
+
+// TODO: Remove in production
+import fs from 'fs';
 
 const baseUrl = 'https://www.instagram.com';
 const apiUrl = 'https://www.instagram.com/api/v1';
@@ -18,6 +22,10 @@ const userAgent =
   'Mobile/15E148 Instagram 142.0.0.22.109 ' +
   '(iPhone12,5; iOS 14_1; en_US; en-US; scale=3.00; 1242x2688; 214888322) NW/1';
 let cookies: Cookies = {};
+
+// TODO: Remove in production
+if (fs.existsSync('cookies.json'))
+  cookies = JSON.parse(fs.readFileSync('cookies.json', 'utf8')) as Cookies;
 
 const getPublicKeysData = async (): Promise<{
   csrfToken: string;
@@ -176,9 +184,12 @@ const getIgCookies = async (): Promise<void> => {
     throw new Error('Response message: ' + res.data.message);
   if (!res.headers['set-cookie']) throw new Error('Cookies not found.');
   cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
+
+  // TODO: Remove in production
+  fs.writeFileSync('cookies.json', JSON.stringify(cookies, null, 2));
 };
 
-const getPostData = async (postShortCode: string): Promise<object> => {
+const getPostData = async (postShortCode: string): Promise<PostData> => {
   for (let i = 0; i < 2; i++) {
     if (await isCookiesValid()) break;
     await getIgCookies();
@@ -203,14 +214,15 @@ const getPostData = async (postShortCode: string): Promise<object> => {
 
   if (res.status !== 200)
     throw new Error(`Post data request status ${res.status}.`);
-  if ('items' in res.data === false)
-    throw new Error('Post response is invalid.');
-  if (_.isArray(res.data.items) && res.data.items.length === 0)
-    throw new Error('Post have no items.');
   if (res.headers['set-cookie'])
     cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
-  if (_.isObject(res.data.items[0])) return res.data.items[0];
-  else throw new Error('Post data is not an array.');
+  if ('items' in res.data === false)
+    throw new Error('Post response is invalid.');
+  if (!_.isArray(res.data.items)) throw new Error('Post data is not an array.');
+  if (res.data.items.length === 0) throw new Error('Post have no items.');
+  const postData = res.data.items[0] as unknown;
+  if (!isPostData(postData)) throw new Error('Post data is invalid type.');
+  return postData;
 };
 
 const igAgent = {

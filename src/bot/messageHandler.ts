@@ -1,5 +1,6 @@
 import { Message, TextBasedChannel } from 'discord.js';
 import regex from '../utils/regex';
+import igAgent from '../utils/igAgent';
 
 const messageHandler = async (
   msg: Message<boolean>,
@@ -9,25 +10,15 @@ const messageHandler = async (
   const links = msgParts.filter((part) => part.match(/http/));
   if (links.length > 0) {
     for (let i = 0; i < links.length; i++) {
-      if (links[i].match(regex.igLink)) {
-        // const prepareMessage = async () => {
-        //   let message = await fixInstaLink(links[i]);
-        //   for (let i = 0; i < 3; i++) {
-        //     if (message?.error === 'auth required') {
-        //       await getIgCookies(
-        //         process.env.IG_USERNAME,
-        //         process.env.IG_PASSWORD,
-        //         cookiesPath,
-        //       );
-        //       message = await fixInstaLink(links[i]);
-        //     } else return message;
-        //   }
-        //   if (message?.error === 'auth required') {
-        //     message = { content: 'Cannot get Instagram cookies.' };
-        //   }
-        //   return message;
-        // };
-        // const replyMsg = await prepareMessage();
+      const linkMatch = links[i].match(regex.igLink);
+      if (linkMatch) {
+        const postShortCode = linkMatch[1];
+        const postData = await igAgent.getPostData(postShortCode);
+        if (postData) console.log('Got post data.');
+
+        // const filesToSendPromices = await filesToSendSelector(postData);
+        // const filesToSend = await Promise.all(filesToSendPromices);
+        // console.log(filesToSend);
 
         const msgIsNotDeleted = (): boolean => {
           const fetchedMessage = channel.messages.cache.get(msg.id);
@@ -37,6 +28,7 @@ const messageHandler = async (
 
         if (msgIsNotDeleted()) {
           await msg.reply({ content: 'Got IG link #' + i });
+          // console.log(postData);
           //   if (replyMsg.files) msg.suppressEmbeds(true);
           // } else {
           //   console.error('Cannot fetch message.');
@@ -46,4 +38,5 @@ const messageHandler = async (
     }
   }
 };
+
 export default messageHandler;
