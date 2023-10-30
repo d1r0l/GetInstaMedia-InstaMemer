@@ -3,11 +3,11 @@ import _ from 'lodash';
 interface PostBaseData {
   caption: {
     text: string;
-    user: {
-      username: string;
-      full_name: string;
-      profile_pic_url: string;
-    };
+  } | null;
+  user: {
+    username: string;
+    full_name: string;
+    profile_pic_url: string;
   };
   code: string;
 }
@@ -69,17 +69,14 @@ export const isPostData = (data: unknown): data is PostData => {
     _.isString(data.code) &&
     data.code.length === 11 &&
     'caption' in data &&
-    _.isObject(data.caption) &&
-    'text' in data.caption &&
-    _.isString(data.caption.text) &&
-    'user' in data.caption &&
-    _.isObject(data.caption.user) &&
-    'username' in data.caption.user &&
-    _.isString(data.caption.user.username) &&
-    'full_name' in data.caption.user &&
-    _.isString(data.caption.user.full_name) &&
-    'profile_pic_url' in data.caption.user &&
-    _.isString(data.caption.user.profile_pic_url) &&
+    'user' in data &&
+    _.isObject(data.user) &&
+    'username' in data.user &&
+    _.isString(data.user.username) &&
+    'full_name' in data.user &&
+    _.isString(data.user.full_name) &&
+    'profile_pic_url' in data.user &&
+    _.isString(data.user.profile_pic_url) &&
     'media_type' in data &&
     _.isNumber(data.media_type) &&
     'product_type' in data &&

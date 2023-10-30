@@ -15,20 +15,33 @@ const messageHandler = async (
         const postShortCode = igLinkMatch[1];
         const postData = await igAgent.getPostData(postShortCode);
         const mediaUrlArray = await igAgent.mediaUrlArraySelector(postData);
-        const embed = {
+        const embed: {
+          color: number;
+          url: string;
+          author: {
+            name: string;
+            icon_url: string;
+            url: string;
+          };
+          description?: string;
+          footer: {
+            text: string;
+            icon_url: string;
+          };
+        } = {
           color: 0xe1306c,
           url: `${igAgent.baseUrl}/p/${postShortCode}/`,
           author: {
-            name: postData.caption.user.full_name,
-            icon_url: postData.caption.user.profile_pic_url,
-            url: `${igAgent.baseUrl}/${postData.caption.user.username}`,
+            name: postData.user.full_name,
+            icon_url: postData.user.profile_pic_url,
+            url: `${igAgent.baseUrl}/${postData.user.username}`,
           },
-          description: postData.caption.text,
           footer: {
             text: 'Instagram',
             icon_url: `${igAgent.baseUrl}/static/images/ico/favicon-192.png/68d99ba29cc8.png`,
           },
         };
+        if (postData.caption) embed.description = postData.caption.text;
 
         const responseMessage = {
           files: mediaUrlArray,
