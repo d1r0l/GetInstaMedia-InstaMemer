@@ -10,15 +10,30 @@ const messageHandler = async (
   const links = msgParts.filter((part) => part.match(/http/));
   if (links.length > 0) {
     for (let i = 0; i < links.length; i++) {
-      const linkMatch = links[i].match(regex.igLink);
-      if (linkMatch) {
-        const postShortCode = linkMatch[1];
+      const igLinkMatch = links[i].match(regex.igLink);
+      if (igLinkMatch) {
+        const postShortCode = igLinkMatch[1];
         const postData = await igAgent.getPostData(postShortCode);
-        if (postData) console.log('Got post data.');
+        const mediaUrlArray = await igAgent.mediaUrlArraySelector(postData);
+        const embed = {
+          color: 0xe1306c,
+          url: `${igAgent.baseUrl}/p/${postShortCode}/`,
+          author: {
+            name: postData.caption.user.full_name,
+            icon_url: postData.caption.user.profile_pic_url,
+            url: `${igAgent.baseUrl}/${postData.caption.user.username}`,
+          },
+          description: postData.caption.text,
+          footer: {
+            text: 'Instagram',
+            icon_url: `${igAgent.baseUrl}/static/images/ico/favicon-192.png/68d99ba29cc8.png`,
+          },
+        };
 
-        // const filesToSendPromices = await filesToSendSelector(postData);
-        // const filesToSend = await Promise.all(filesToSendPromices);
-        // console.log(filesToSend);
+        const responseMessage = {
+          files: mediaUrlArray,
+          embeds: [embed],
+        };
 
         const msgIsNotDeleted = (): boolean => {
           const fetchedMessage = channel.messages.cache.get(msg.id);
@@ -27,12 +42,8 @@ const messageHandler = async (
         };
 
         if (msgIsNotDeleted()) {
-          await msg.reply({ content: 'Got IG link #' + i });
-          // console.log(postData);
-          //   if (replyMsg.files) msg.suppressEmbeds(true);
-          // } else {
-          //   console.error('Cannot fetch message.');
-          // }
+          await msg.reply(responseMessage);
+          await msg.suppressEmbeds(true);
         }
       }
     }
