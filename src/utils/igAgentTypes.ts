@@ -94,7 +94,7 @@ export const isPostData = (data: unknown): data is PostData => {
   else return false;
   switch (data.media_type) {
     case 1:
-      if (data.product_type !== 'image') return false;
+      if (data.product_type !== 'feed') return false;
       for (let i = 0; i < data.image_versions2.candidates.length; i++) {
         if (
           _.isObject(data.image_versions2.candidates[i]) &&
