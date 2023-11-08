@@ -39,6 +39,7 @@ const getPublicKeysData = async (): Promise<{
     headers: {
       'user-agent': userAgent,
     },
+    maxRedirects: 0,
     validateStatus: () => true,
   });
 
@@ -133,6 +134,7 @@ const isCookiesValid = async (): Promise<boolean> => {
       'User-Agent': userAgent,
       Cookie: getCookieHeader(cookies),
     },
+    maxRedirects: 0,
     validateStatus: () => true,
   });
 
@@ -174,12 +176,20 @@ const getIgCookies = async (): Promise<void> => {
       trustedDeviceRecords: '{}',
       username: process.env.IG_USERNAME,
     },
+    maxRedirects: 0,
     validateStatus: () => true,
   };
 
   const res = await axios(req);
-  if (res.status !== 200)
+  if (res.status !== 200) {
+    if ('message' in res.data)
+      throw new Error(
+        'Cookies request status ${res.status}. ' +
+          'Response message: ' +
+          res.data.message,
+      );
     throw new Error(`Cookies request status ${res.status}.`);
+  }
   if (res.data.status === 'fail')
     throw new Error('Response message: ' + res.data.message);
   if (!res.headers['set-cookie']) throw new Error('Cookies not found.');
@@ -211,6 +221,7 @@ const getPostData = async (postShortCode: string): Promise<PostData> => {
       'User-Agent': userAgent,
       Cookie: getCookieHeader(cookies),
     },
+    maxRedirects: 0,
     validateStatus: () => true,
   });
 
@@ -227,12 +238,15 @@ const getPostData = async (postShortCode: string): Promise<PostData> => {
   return postData;
 };
 
-const mediaUrlArraySelector = async (postData: PostData): Promise<string[]> => {
+const mediaUrlArraySelector = async (
+  postData: PostData,
+  maxSize?: number,
+): Promise<string[]> => {
   const isMediaValidSize = (mediaSize: string): boolean => {
     if (
       parseInt(mediaSize) &&
       parseInt(mediaSize) !== 0 &&
-      parseInt(mediaSize) < 32000000
+      parseInt(mediaSize) <= (maxSize ? maxSize : Infinity)
     )
       return true;
     else return false;

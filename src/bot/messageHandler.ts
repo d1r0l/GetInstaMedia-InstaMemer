@@ -14,7 +14,10 @@ const messageHandler = async (
       if (igLinkMatch) {
         const postShortCode = igLinkMatch[1];
         const postData = await igAgent.getPostData(postShortCode);
-        const mediaUrlArray = await igAgent.mediaUrlArraySelector(postData);
+        const mediaUrlArray = await igAgent.mediaUrlArraySelector(
+          postData,
+          25 * 1024 * 1024,
+        );
         const embed: {
           color: number;
           url: string;

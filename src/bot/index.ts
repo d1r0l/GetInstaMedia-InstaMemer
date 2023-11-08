@@ -28,7 +28,8 @@ const bot = async () => {
         await messageHandler(msg, channel);
       } catch (error) {
         if (error instanceof Error) {
-          console.error('Error: ' + error.message);
+          // console.error('Error: ' + error.message);
+          console.error(error);
         } else console.error(error);
       }
     }
