@@ -28,8 +28,9 @@ const bot = async () => {
         await messageHandler(msg, channel);
       } catch (error) {
         if (error instanceof Error) {
-          // console.error('Error: ' + error.message);
-          console.error(error);
+          if (process.env.NODE_ENV !== 'production')
+            console.error('Error: ' + error.message);
+          else console.error(error);
         } else console.error(error);
       }
     }
@@ -40,7 +41,9 @@ const bot = async () => {
     await client.login(token);
   } catch (error) {
     if (error instanceof Error) {
-      console.error('Error: ' + error.message);
+      if (process.env.NODE_ENV !== 'production')
+        console.error('Error: ' + error.message);
+      else console.error(error);
     } else console.error(error);
   }
 };
