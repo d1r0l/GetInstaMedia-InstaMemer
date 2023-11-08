@@ -27,9 +27,8 @@ const bot = async () => {
           throw new Error('Channel is not text based.');
         await messageHandler(msg, channel);
       } catch (error) {
-        if (error instanceof Error) {
-          // console.error('Error: ' + error.message);
-          console.error(error);
+        if (process.env.NODE_ENV !== 'production') {
+          if (error instanceof Error) console.error('Error: ' + error.message);
         } else console.error(error);
       }
     }
@@ -39,8 +38,8 @@ const bot = async () => {
     if (!token) throw new Error('No Discord token provided.');
     await client.login(token);
   } catch (error) {
-    if (error instanceof Error) {
-      console.error('Error: ' + error.message);
+    if (process.env.NODE_ENV !== 'production') {
+      if (error instanceof Error) console.error('Error: ' + error.message);
     } else console.error(error);
   }
 };

@@ -20,7 +20,7 @@ const userAgent =
   'Mobile/15E148 Instagram 142.0.0.22.109 ' +
   '(iPhone12,5; iOS 14_1; en_US; en-US; scale=3.00; 1242x2688; 214888322) NW/1';
 let cookies: Cookies = {};
-if (process.env.ENVIROMENT === 'development') {
+if (process.env.NODE_ENV !== 'production') {
   if (fs.existsSync('cookies/igCookies.json'))
     cookies = JSON.parse(
       fs.readFileSync('cookies/igCookies.json', 'utf8'),
@@ -194,7 +194,7 @@ const getIgCookies = async (): Promise<void> => {
     throw new Error('Response message: ' + res.data.message);
   if (!res.headers['set-cookie']) throw new Error('Cookies not found.');
   cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
-  if (process.env.ENVIROMENT === 'development')
+  if (process.env.NODE_ENV !== 'production')
     fs.writeFileSync(
       'cookies/igCookies.json',
       JSON.stringify(cookies, null, 2),
