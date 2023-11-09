@@ -184,7 +184,7 @@ const getIgCookies = async (): Promise<void> => {
   if (res.status !== 200) {
     if ('message' in res.data)
       throw new Error(
-        'Cookies request status ${res.status}. ' +
+        `Cookies request status ${res.status}. ` +
           'Response message: ' +
           res.data.message,
       );
