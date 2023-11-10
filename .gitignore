@@ -1,14 +1,14 @@
 # dependencies
-/node_modules
-/.pnp
-/*.pnp.js
+*/node_modules
+*/.pnp
+*/*.pnp.js
 
 # testing
-/coverage
+*/coverage
 
 # production
-/build
-/oldVersions
+*/build
+*/oldVersions
 
 # misc
 .DS_Store
@@ -24,7 +24,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # cookies
-/cookies
+*/cookies
 
 # templates
-/template
+*/template
