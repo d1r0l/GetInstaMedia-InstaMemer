@@ -8,7 +8,7 @@
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts .",
     "build": "tsc",
-    "build:full": "cd ../client && npm run build && cp -r build ../server/client && cd ../server && tsc",
+    "build:full": "rm -rf client/* && cd ../client && npm run build && cp -rf build/* ../server/client/ && cd ../server && tsc",
     "deploy": "npm run build:full && fly deploy"
   },
   "dependencies": {
