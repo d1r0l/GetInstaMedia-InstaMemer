@@ -1,7 +1,10 @@
-import dotenv from 'dotenv';
 import bot from './bot';
-dotenv.config();
-
-console.log(`Current environment: ${process.env.NODE_ENV}.`);
+import app from './app';
 
 bot().catch(console.error);
+
+const port = 3000;
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
