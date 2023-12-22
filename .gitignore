@@ -27,5 +27,5 @@ yarn-error.log*
 # cookies
 */cookies
 
-# templates
-*/template
+# misc
+*/temp
