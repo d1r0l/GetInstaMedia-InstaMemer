@@ -29,7 +29,6 @@ getMediaRouter.post('/', (async (req, res) => {
           if (mediaUrlArray.length === 0)
             throw new Error(`No media found in IG link ${postShortCode}`);
           concatMediaUrls.push(...mediaUrlArray);
-          console.log(mediaUrlArray);
         }
         if (!linkDefined) undefinedLinks.push(links[i]);
       }
