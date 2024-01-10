@@ -1,15 +1,18 @@
+import crypto from 'node:crypto';
+import fs from 'fs';
+
 import dotenv from 'dotenv';
 import axios from 'axios';
 import _ from 'lodash';
 import sodium from 'libsodium-wrappers';
-import crypto from 'node:crypto';
+
 import {
   Cookies,
   updateCookiesFromSetHeader,
   getCookieHeader,
 } from './cookiesParser';
 import { PostData, isPostData } from './igAgentTypes';
-import fs from 'fs';
+
 dotenv.config();
 
 const baseUrl = 'https://www.instagram.com';
@@ -20,7 +23,8 @@ const userAgent =
   'Mobile/15E148 Instagram 142.0.0.22.109 ' +
   '(iPhone12,5; iOS 14_1; en_US; en-US; scale=3.00; 1242x2688; 214888322) NW/1';
 let cookies: Cookies = {};
-if (process.env.NODE_ENV !== 'production') {
+
+if (process.env.NODE_ENV === 'development') {
   if (fs.existsSync('cookies/igCookies.json'))
     cookies = JSON.parse(
       fs.readFileSync('cookies/igCookies.json', 'utf8'),
@@ -44,35 +48,39 @@ const getPublicKeysData = async (): Promise<{
   });
 
   if (
-    res.status === 200 &&
-    _.isObject(res.data) &&
-    'config' in res.data &&
-    _.isObject(res.data.config) &&
-    'csrf_token' in res.data.config &&
-    _.isString(res.data.config.csrf_token) &&
-    'encryption' in res.data &&
-    _.isObject(res.data.encryption) &&
-    'key_id' in res.data.encryption &&
-    _.isString(res.data.encryption.key_id) &&
-    'public_key' in res.data.encryption &&
-    _.isString(res.data.encryption.public_key) &&
-    'version' in res.data.encryption &&
-    _.isString(res.data.encryption.version)
-  ) {
-    const csrfToken = res.data.config.csrf_token;
-    const publicKeyId = Number(res.data.encryption.key_id);
-    if (isNaN(publicKeyId)) throw new Error('Invalid public key id.');
-    const publicKey = res.data.encryption.public_key;
-    const publicKeyVersion = Number(res.data.encryption.version);
-    if (isNaN(publicKeyVersion)) throw new Error('Invalid public key version.');
+    res.status !== 200 ||
+    !_.isObject(res.data) ||
+    !('config' in res.data) ||
+    !_.isObject(res.data.config) ||
+    !('csrf_token' in res.data.config) ||
+    !_.isString(res.data.config.csrf_token) ||
+    !('encryption' in res.data) ||
+    !_.isObject(res.data.encryption) ||
+    !('key_id' in res.data.encryption) ||
+    !_.isString(res.data.encryption.key_id) ||
+    !('public_key' in res.data.encryption) ||
+    !_.isString(res.data.encryption.public_key) ||
+    !('version' in res.data.encryption) ||
+    !_.isString(res.data.encryption.version)
+  )
+    throw new Error('Cannot get public keys data.');
 
-    return {
-      csrfToken,
-      publicKeyId,
-      publicKey,
-      publicKeyVersion,
-    };
-  } else throw new Error('Cannot get public keys data.');
+  const csrfToken = res.data.config.csrf_token;
+  const publicKeyId = Number(res.data.encryption.key_id);
+
+  if (isNaN(publicKeyId)) throw new Error('Invalid public key id.');
+
+  const publicKey = res.data.encryption.public_key;
+  const publicKeyVersion = Number(res.data.encryption.version);
+
+  if (isNaN(publicKeyVersion)) throw new Error('Invalid public key version.');
+
+  return {
+    csrfToken,
+    publicKeyId,
+    publicKey,
+    publicKeyVersion,
+  };
 };
 
 const encryptPassword = async (
@@ -91,6 +99,7 @@ const encryptPassword = async (
     true,
     ['encrypt', 'decrypt'],
   );
+
   const sealedKey = sodium.crypto_box_seal(
     Buffer.from(await crypto.subtle.exportKey('raw', key)),
     Buffer.from(pKey, 'hex'),
@@ -151,6 +160,7 @@ const getIgCookies = async (): Promise<void> => {
     throw new Error('No Instagram username or password provided.');
 
   const keys = await getPublicKeysData();
+
   if (!keys) throw new Error('Cannot get public keys data.');
 
   const enc_password = await encryptPassword(
@@ -181,6 +191,7 @@ const getIgCookies = async (): Promise<void> => {
   };
 
   const res = await axios(req);
+
   if (res.status !== 200) {
     if ('message' in res.data)
       throw new Error(
@@ -193,7 +204,9 @@ const getIgCookies = async (): Promise<void> => {
   if (res.data.status === 'fail')
     throw new Error('Response message: ' + res.data.message);
   if (!res.headers['set-cookie']) throw new Error('Cookies not found.');
+
   cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
+
   if (process.env.NODE_ENV !== 'production')
     fs.writeFileSync(
       'cookies/igCookies.json',
@@ -227,14 +240,19 @@ const getPostData = async (postShortCode: string): Promise<PostData> => {
 
   if (res.status !== 200)
     throw new Error(`Post data request status ${res.status}.`);
+
   if (res.headers['set-cookie'])
     cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
+
   if ('items' in res.data === false)
     throw new Error('Post response is invalid.');
   if (!_.isArray(res.data.items)) throw new Error('Post data is not an array.');
   if (res.data.items.length === 0) throw new Error('Post have no items.');
+
   const postData = res.data.items[0] as unknown;
+
   if (!isPostData(postData)) throw new Error('Post data is invalid type.');
+
   return postData;
 };
 
