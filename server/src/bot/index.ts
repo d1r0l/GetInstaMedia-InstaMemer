@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import { Client, GatewayIntentBits } from 'discord.js';
+
 import messageHandler from './messageHandler';
+
 dotenv.config();
 
 const bot = async () => {

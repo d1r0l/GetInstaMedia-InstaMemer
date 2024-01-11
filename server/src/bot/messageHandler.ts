@@ -8,9 +8,11 @@ const messageHandler = async (
 ) => {
   const msgParts = msg.content.replace(/\n+/g, ' ').split(' ');
   const links = msgParts.filter((part) => part.match(/http/));
+
   if (links.length > 0) {
     for (let i = 0; i < links.length; i++) {
       const igLinkMatch = links[i].match(regex.igLink);
+
       if (igLinkMatch) {
         const postShortCode = igLinkMatch[1];
         const postData = await igAgent.getPostData(postShortCode);
@@ -44,6 +46,7 @@ const messageHandler = async (
             icon_url: `${igAgent.baseUrl}/static/images/ico/favicon-192.png/68d99ba29cc8.png`,
           },
         };
+
         if (postData.caption) embed.description = postData.caption.text;
 
         const responseMessage = {
