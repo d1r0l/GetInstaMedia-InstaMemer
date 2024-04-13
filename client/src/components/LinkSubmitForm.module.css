@@ -1,0 +1,11 @@
+.linkSubmitForm {
+  font-size: 1rem;
+  margin-block: 5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.linkSubmitFormInput {
+  width: 50%;
+}

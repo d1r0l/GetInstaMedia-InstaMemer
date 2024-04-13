@@ -1,6 +1,27 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+header {
+  background: linear-gradient(to bottom right, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+  font-family: Fasthand, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+header h1 > a {
+  color: #ffffff;
+  text-decoration: none;
+}
+header h1 > a:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+header h1 {
+  font-size: 6rem;
+  margin: 2.5rem 2.5rem;
+}
+header h1 > a {
+  padding-inline: 5%;
+}
+
+main {
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
 }
