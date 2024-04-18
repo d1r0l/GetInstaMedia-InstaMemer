@@ -1,6 +1,5 @@
 import express from 'express';
 import _ from 'lodash';
-
 import igAgent from '../utils/igAgent';
 import regex from '../utils/regex';
 
@@ -26,8 +25,11 @@ getMediaRouter.post('/', (async (req, res) => {
     return;
   }
 
-  const concatMediaUrls = [];
-  const undefinedLinks = [];
+  const mediaData: {
+    name: string;
+    medias: string[];
+  }[] = [];
+  const undefinedLinks: string[] = [];
 
   for (let i = 0; i < links.length; i++) {
     let linkDefined = false;
@@ -39,12 +41,15 @@ getMediaRouter.post('/', (async (req, res) => {
       const mediaUrlArray = await igAgent.mediaUrlArraySelector(postData);
       if (mediaUrlArray.length === 0)
         throw new Error(`No media found in IG link ${postShortCode}`);
-      concatMediaUrls.push(...mediaUrlArray);
+      mediaData.push({
+        name: postShortCode,
+        medias: mediaUrlArray,
+      });
     }
     if (!linkDefined) undefinedLinks.push(links[i]);
   }
 
-  if (concatMediaUrls.length === 0) {
+  if (mediaData.length === 0) {
     res.status(400).send({
       error: 'No media found in payload',
       ...(undefinedLinks ? undefinedLinks : {}),
@@ -53,7 +58,7 @@ getMediaRouter.post('/', (async (req, res) => {
   }
 
   res.status(200).send({
-    media: concatMediaUrls,
+    mediaData: mediaData,
     ...(undefinedLinks ? undefinedLinks : {}),
   });
 }) as express.RequestHandler);

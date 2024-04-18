@@ -1,16 +1,16 @@
 import { baseUrl } from '../config'
 import axios from 'axios'
 import _ from 'lodash'
-import { Media, typeUrlsToMedias } from '../types'
-import proxyMediaUrl from '../utils/proxyMediaUrl'
+import { IGItemData } from '../types'
+import typeIGItemsData from '../utils/typeIGItemsData'
 import styles from './LinkSubmitForm.module.css'
 
 const LinkSubmitForm = ({
-  setMedias
+  setItems
 }: {
-  setMedias: React.Dispatch<React.SetStateAction<Media[]>>
+  setItems: React.Dispatch<React.SetStateAction<IGItemData[]>>
 }): JSX.Element => {
-  const autoSelectText = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleFocus = (e: React.FormEvent<HTMLInputElement>) => {
     e.currentTarget.select()
   }
 
@@ -24,12 +24,11 @@ const LinkSubmitForm = ({
       if (
         'data' in res &&
         _.isObject(res.data) &&
-        'media' in res.data &&
-        _.isArray(res.data.media)
+        'mediaData' in res.data &&
+        _.isArray(res.data.mediaData)
       ) {
-        const medias = typeUrlsToMedias(res.data.media)
-        medias.forEach(m => (m.url = proxyMediaUrl(m.url)))
-        setMedias(medias)
+        const mediaData = typeIGItemsData(res.data.mediaData)
+        setItems(mediaData)
       }
     } catch (err) {
       if (err instanceof Error && 'response' in err) console.error(err.response)
@@ -51,11 +50,9 @@ const LinkSubmitForm = ({
         name='payload'
         autoComplete='off'
         autoFocus={true}
-        onFocus={autoSelectText}
+        onFocus={handleFocus}
       />
-      <button className='linkSubmitForm-button' type='submit'>
-        Download
-      </button>
+      <button type='submit'>Load Media</button>
     </form>
   )
 }

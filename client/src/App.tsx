@@ -1,28 +1,22 @@
 import { useState } from 'react'
 import './App.css'
-import { Media } from './types'
+import { IGItemData } from './types'
+import Header from './components/Header'
 import LinkSubmitForm from './components/LinkSubmitForm'
 import MediaGrid from './components/MediaGrid'
+import Footer from './components/Footer'
 
 const App = () => {
-  const [medias, setMedias] = useState<Media[]>([])
+  const [items, setItems] = useState<IGItemData[]>([])
 
   return (
     <>
-      <header>
-        <h1>
-          <a href='/'>GetInstaMedia</a>
-        </h1>
-      </header>
+      <Header />
       <main>
-        <LinkSubmitForm setMedias={setMedias} />
-        <div>
-          <MediaGrid medias={medias} />
-        </div>
+        <LinkSubmitForm setItems={setItems} />
+        <MediaGrid items={items} />
       </main>
-      <footer>
-        <p>Author of this website is not affiliated with Instagram or Meta.</p>
-      </footer>
+      <Footer />
     </>
   )
 }

@@ -2,3 +2,19 @@
   width: 320px;
   border-radius: 6px;
 }
+
+.unknownItem {
+  width: 320px;
+  min-height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  background-color: dimgray;
+  border-radius: 6px;
+}
+
+.unknownItemSpan {
+  color: white;
+  font-size: 1.5rem;
+}

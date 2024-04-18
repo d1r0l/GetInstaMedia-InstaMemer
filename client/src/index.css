@@ -33,7 +33,11 @@ h1 {
   line-height: 1.1;
 }
 
+.buttonLike{
+  display: block;
+}
 input,
+.buttonLike,
 button {
   border-radius: 6px;
   border: 3px solid transparent;
@@ -44,10 +48,12 @@ button {
   cursor: pointer;
   transition: border-color 0.25s, filter 0.25s;
 }
+.buttonLike,
 button {
   background-color: #4f5bd5;
 }
 input:hover,
+.buttonLike:hover,
 button:hover {
   filter: brightness(125%);
 }
@@ -55,8 +61,14 @@ button:hover {
   outline: none;
 }
 *:focus-visible {
-  border: 3px solid #ffffff;
-  outline: none;
+  outline: 3px solid #ffffff;
+}
+a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none; 
+  color: #ffffff;
 }
 
 #root {
@@ -75,6 +87,7 @@ button:hover {
   a:hover {
     color: #747bff;
   }
+  .buttonLike,
   button {
     background-color: #f9f9f9;
   }

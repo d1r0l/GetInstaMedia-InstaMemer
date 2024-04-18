@@ -24,18 +24,10 @@ const MediaItem = ({ media }: { media: Media }): JSX.Element => {
           crossOrigin='anonymous'
         />
       )
-    case 'unknown':
-      return (
-        <span>
-          <a href={media.url} target='_blank'>
-            Unknown Media
-          </a>
-        </span>
-      )
     default:
       return (
-        <div className={styles.mediaItem}>
-          <span>Can't display media</span>
+        <div className={styles.unknownItem}>
+          <span className={styles.unknownItemSpan}>Unknown Media</span>
         </div>
       )
   }
