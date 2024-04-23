@@ -1,11 +1,23 @@
 .linkSubmitForm {
   font-size: 1rem;
-  margin-block: 2rem;
+  margin: 2rem;
   display: flex;
   gap: 1rem;
   justify-content: center;
 }
 
 .linkSubmitFormInput {
-  width: 50%;
+  flex: 1;
+  max-width: min(50vw, 1000px);
+}
+
+@media screen and (max-width: 720px) {
+  .linkSubmitForm {
+    flex-direction: column;
+  }
+
+  .linkSubmitFormInput {
+    width: auto;
+    max-width: initial;
+  }
 }

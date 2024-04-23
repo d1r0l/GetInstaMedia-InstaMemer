@@ -3,10 +3,12 @@
   justify-content: center;
   align-items: center;
   background: linear-gradient(to bottom right, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
-  padding: 0.5rem;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
 }
 
-.header > a {
+.logoLink {
+  display: contents;
   text-decoration: none;
   color: inherit;
 }
