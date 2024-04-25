@@ -1,0 +1,16 @@
+.title {
+  padding-bottom: 1rem;
+}
+
+.content > p {
+  padding-block: 0.5rem;
+  text-align: justify;
+  line-height: 1.2;
+}
+
+@media (max-width: 356px) {
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
