@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import './App.css'
 import { IGItemData } from './types'
 import Header from './components/Header'
 import LinkSubmitForm from './components/LinkSubmitForm'
 import MediaGrid from './components/MediaGrid'
 import Footer from './components/Footer'
 
-const App = () => {
+const App = (): JSX.Element => {
   const [items, setItems] = useState<IGItemData[]>([])
 
   return (

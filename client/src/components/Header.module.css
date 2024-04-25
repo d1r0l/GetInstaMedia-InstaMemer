@@ -2,9 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to bottom right, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
   padding-block: 0.5rem;
   padding-inline: 1rem;
+  background: linear-gradient(to bottom right, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
 }
 
 .logoLink {
@@ -16,6 +16,5 @@
 .logo {
   display: block;
   max-width: calc(100% - 2rem);
-  filter: invert();
   padding: 0.5rem;
 }

@@ -1,6 +1,6 @@
 import { IGItemData } from '../types'
 import MediaItem from './MediaItem'
-import style from './MidiaGrid.module.css'
+import style from './MediaGrid.module.css'
 
 const MediaGrid = ({ items }: { items: IGItemData[] }): JSX.Element => {
   return (

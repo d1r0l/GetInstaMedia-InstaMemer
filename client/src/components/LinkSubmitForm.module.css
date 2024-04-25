@@ -11,7 +11,7 @@
   max-width: min(50vw, 1000px);
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 700px) {
   .linkSubmitForm {
     flex-direction: column;
   }
@@ -19,5 +19,12 @@
   .linkSubmitFormInput {
     width: auto;
     max-width: initial;
+  }
+}
+
+
+@media screen and (max-width: 356px) {
+  .linkSubmitForm {
+    margin: 1rem;
   }
 }

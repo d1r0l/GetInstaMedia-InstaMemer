@@ -1,11 +1,69 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+body {
+	line-height: 1;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
 :root {
+  --color-text: #f0f0f0;
+  --color-background: #1f1f1f;
+  --color-main: #4f5bd5;
+  --color-main-hover: #7880de;
+  --color-link: #d1d1d1;
+  --color-input: #383838;
+  --color-input-hover: #525252;
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: #ffffff;
-  background-color: #242424;
+  color: var(--color-text);
+  background-color: var(--color-background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,28 +72,47 @@
   -webkit-text-size-adjust: 100%;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-text: #1f1f1f;
+    --color-background: #f0f0f0;
+    --color-main: #feda75;
+    --color-main-hover: #fecc43;
+    --color-link: #3d3d3d;
+    --color-input: #d6d6d6;
+    --color-input-hover: #bdbdbd;
+  }
 }
 
 body {
   margin: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 h1 {
   font-size: 3.2em;
-  line-height: 1.1;
+  font-weight: 800;
 }
 
-.buttonLike{
-  display: block;
+h2 {
+  font-size: 2em;
+  font-weight: 600;
 }
+
+a {
+  font-weight: 500;
+  color: var(--color-link);
+  transition: color 0.25s, background-color 0.25s;
+}
+
+input {
+  background-color: var(--color-input);
+}
+
+input:hover {
+  background-color: var(--color-input-hover);
+}
+
 input,
 .buttonLike,
 button {
@@ -45,50 +122,52 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  cursor: pointer;
-  transition: border-color 0.25s, filter 0.25s;
+  transition: color 0.25s, background-color 0.25s;
 }
+
 .buttonLike,
 button {
-  background-color: #4f5bd5;
+  background-color: var(--color-main);
+  cursor: pointer;
 }
-input:hover,
+
+.buttonLike{
+  display: block;
+  color: var(--color-text);
+  line-height: normal;
+  text-decoration: none;
+}
+
+.buttonLike:hover,
+.buttonLike:active {
+  text-decoration: none;
+}
+
 .buttonLike:hover,
 button:hover {
-  filter: brightness(125%);
+  color: var(--color-text);
+  background-color: var(--color-main-hover);
 }
+
 *:focus {
   outline: none;
 }
+
 *:focus-visible {
-  outline: 3px solid #ffffff;
-}
-a:link,
-a:visited,
-a:hover,
-a:active {
-  text-decoration: none; 
-  color: #ffffff;
+  outline: 3px solid var(--color-text);
 }
 
 #root {
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  .buttonLike,
-  button {
-    background-color: #f9f9f9;
-  }
+/* TODO: move main to separate file */
+main {
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
 }
