@@ -9,4 +9,11 @@ interface IGItemData {
   medias: Media[]
 }
 
+enum SubmitState {
+  error = 0,
+  idle = 1,
+  loading = 2
+}
+
 export type { Media, IGItemData }
+export { SubmitState }
