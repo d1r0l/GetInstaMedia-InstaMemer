@@ -12,7 +12,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={() => onClose()}>
-      <>
+      <div className={style.container}>
         <h2 className={style.title}>Disclaimer</h2>
         <div className={style.content}>
           <p>
@@ -43,7 +43,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
             Author of this website is not affiliated with Instagram or Meta.
           </p>
         </div>
-      </>
+      </div>
     </Modal>
   )
 }

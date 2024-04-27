@@ -2,6 +2,10 @@
   border-radius: 6px;
 }
 
+.image {
+  cursor: pointer;
+}
+
 .unknownItem {
   min-height: 180px;
   display: flex;

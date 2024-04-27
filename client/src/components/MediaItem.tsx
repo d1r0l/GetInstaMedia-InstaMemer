@@ -1,7 +1,26 @@
 import { Media } from '../types'
 import styles from './MediaItem.module.css'
 
-const MediaItem = ({ media }: { media: Media }): JSX.Element => {
+interface MediaItemProps {
+  media: Media
+  setImageVieverUrl: (url: string) => void
+  setImageVieverIsOpen: (isOpen: boolean) => void
+}
+
+const MediaItem: React.FC<MediaItemProps> = ({
+  media,
+  setImageVieverUrl,
+  setImageVieverIsOpen
+}) => {
+  const openModal = () => {
+    setImageVieverUrl(media.url)
+    setImageVieverIsOpen(true)
+  }
+
+  const handleImgKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
+    if (event.key === 'Enter') openModal()
+  }
+
   switch (media.type) {
     case 'image/jpeg':
     case 'image/png':
@@ -10,9 +29,12 @@ const MediaItem = ({ media }: { media: Media }): JSX.Element => {
     case 'image/webp':
       return (
         <img
-          className={styles.mediaItem}
+          className={styles.mediaItem + ' ' + styles.image}
           src={media.url}
           crossOrigin='anonymous'
+          onClick={() => openModal()}
+          onKeyDown={handleImgKeyDown}
+          tabIndex={0}
         />
       )
     case 'video/mp4':

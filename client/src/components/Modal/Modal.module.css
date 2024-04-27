@@ -1,20 +1,17 @@
-
 .modal::backdrop {
-  background: hsl(0 0% 0% / 50%);
+  background: hsl(0 0% 0% / 75%);
+  cursor: default;
 }
 
 .modal {
   padding: 0;
-  width: 70%;
-  max-width: 1000px;
   border: 1px solid #b3b3b3;
   border-radius: 0.5rem;
   position: fixed;
 }
 
-.modal > div {
-  position: relative;
-  padding: 2rem;
+.clickable {
+  cursor: pointer;
 }
 
 .modalCloseButton {
@@ -27,27 +24,11 @@
   right: 0.5em;
   width: 2em;
   height: 2em;
+  z-index: 10;
 }
 
 @media (prefers-color-scheme: dark) {
   .modal {
     border: 1px solid #3c3c3c;
-  }
-}
-
-@media (max-width: 700px) {
-  .modal {
-    width: 90%;
-  }
-}
-
-@media (max-width: 356px) {
-  .modal {
-    width: 95%;
-  }
-
-  .modal > div {
-    padding: 1rem;
-    padding-top: 2rem;
   }
 }

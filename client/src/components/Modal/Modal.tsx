@@ -1,16 +1,24 @@
 import { useRef, useEffect, useState } from 'react'
 import style from './Modal.module.css'
 
+//TODO: Fix overflow on mobile
+
+enum ModalCloseMethod {
+  none = 0,
+  button = 1,
+  click = 2
+}
+
 interface ModalProps {
   isOpen: boolean
-  hasCloseBtn?: boolean
+  closeMethod?: ModalCloseMethod
   onClose?: () => void
   children: JSX.Element
 }
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
-  hasCloseBtn = true,
+  closeMethod = ModalCloseMethod.button,
   onClose,
   children
 }) => {
@@ -25,6 +33,8 @@ const Modal: React.FC<ModalProps> = ({
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDialogElement>) => {
+    if (closeMethod === ModalCloseMethod.click)
+      if (event.key === 'Enter') handleCloseModal()
     if (event.key === 'Escape') {
       handleCloseModal()
     }
@@ -47,10 +57,28 @@ const Modal: React.FC<ModalProps> = ({
   }, [isModalOpen])
 
   return (
-    <dialog ref={modalRef} onKeyDown={handleKeyDown} className={style.modal}>
-      <div>
-        {hasCloseBtn && (
-          <button className={style.modalCloseButton} onClick={handleCloseModal}>
+    <dialog
+      ref={modalRef}
+      onKeyDown={handleKeyDown}
+      className={style.modal}
+      {...(closeMethod === ModalCloseMethod.click
+        ? {
+            autofocus: true,
+            tabIndex: 0
+          }
+        : {})}
+    >
+      <div
+        {...(closeMethod === ModalCloseMethod.click
+          ? { onClick: handleCloseModal }
+          : {})}
+      >
+        {closeMethod === ModalCloseMethod.button && (
+          <button
+            className={style.modalCloseButton}
+            onClick={handleCloseModal}
+            autoFocus={true}
+          >
             ✖
           </button>
         )}

@@ -1,14 +1,31 @@
+.container {
+  width: 70dvw;
+  max-width: 1000px;
+  position: relative;
+  padding: 2rem;
+}
+
 .title {
   padding-bottom: 1rem;
 }
 
 .content > p {
-  padding-block: 0.5rem;
+  padding-bottom: 0.5rem;
   text-align: justify;
   line-height: 1.2;
 }
 
+@media (max-width: 700px) {
+  .container {
+    width: auto;
+  }
+}
+
 @media (max-width: 356px) {
+  .container {
+    padding: 1rem;
+  }
+
   .title {
     overflow: hidden;
     text-overflow: ellipsis;
