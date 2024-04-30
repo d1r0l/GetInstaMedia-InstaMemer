@@ -157,6 +157,30 @@ button:hover {
   outline: 3px solid var(--color-text);
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  border-radius: 34px;
+}
+
+::-webkit-scrollbar-track {
+  background: #888888;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00000088;
+  border-radius: 8px;
+  transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00000060;
+  border-radius: 16px;
+}
+
 #root {
   height: 100dvh;
   display: flex;
@@ -165,7 +189,6 @@ button:hover {
   text-align: center;
 }
 
-/* TODO: move main to separate file */
 main {
   flex-direction: column;
   justify-content: center;

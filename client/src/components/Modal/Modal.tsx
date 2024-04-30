@@ -1,47 +1,47 @@
 import { useRef, useEffect, useState } from 'react'
 import style from './Modal.module.css'
 
-//TODO: Fix overflow on mobile
-
-enum ModalCloseMethod {
-  none = 0,
-  button = 1,
-  click = 2
-}
-
 interface ModalProps {
   isOpen: boolean
-  closeMethod?: ModalCloseMethod
+  hasCloseButton?: boolean
   onClose?: () => void
-  children: JSX.Element
+  children: React.ReactNode
 }
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
-  closeMethod = ModalCloseMethod.button,
+  hasCloseButton = true,
   onClose,
   children
 }) => {
-  const [isModalOpen, setModalOpen] = useState(isOpen)
   const modalRef: React.RefObject<HTMLDialogElement> | null = useRef(null)
+  const [isModalOpen, setModalOpen] = useState(isOpen)
+  const [focused, setFocused] = useState(false)
+
+  const onFocus = () => setFocused(true)
+
+  const ignoreClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+  }
 
   const handleCloseModal = () => {
+    document.body.style.overflow = 'auto'
     if (onClose) {
       onClose()
     }
     setModalOpen(false)
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDialogElement>) => {
-    if (closeMethod === ModalCloseMethod.click)
-      if (event.key === 'Enter') handleCloseModal()
-    if (event.key === 'Escape') {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!hasCloseButton) if (focused && e.key === 'Enter') handleCloseModal()
+    if (e.key === 'Escape') {
       handleCloseModal()
     }
   }
 
   useEffect(() => {
     setModalOpen(isOpen)
+    if (isOpen) document.body.style.overflow = 'hidden'
   }, [isOpen])
 
   useEffect(() => {
@@ -60,29 +60,28 @@ const Modal: React.FC<ModalProps> = ({
     <dialog
       ref={modalRef}
       onKeyDown={handleKeyDown}
-      className={style.modal}
-      {...(closeMethod === ModalCloseMethod.click
-        ? {
-            autofocus: true,
-            tabIndex: 0
-          }
-        : {})}
+      onClick={handleCloseModal}
+      className={`${style.modal} ${style.clickable}`}
+      autoFocus={hasCloseButton}
+      tabIndex={hasCloseButton ? undefined : 0}
+      onFocus={onFocus}
     >
       <div
-        {...(closeMethod === ModalCloseMethod.click
-          ? { onClick: handleCloseModal }
-          : {})}
+        className={
+          hasCloseButton ? `${style.container} ${style.unclickable}` : ''
+        }
+        onClick={hasCloseButton ? ignoreClick : handleCloseModal}
       >
-        {closeMethod === ModalCloseMethod.button && (
+        {children}
+        {hasCloseButton && (
           <button
             className={style.modalCloseButton}
             onClick={handleCloseModal}
             autoFocus={true}
           >
-            ✖
+            Close
           </button>
         )}
-        {children}
       </div>
     </dialog>
   )

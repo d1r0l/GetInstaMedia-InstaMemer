@@ -65,7 +65,7 @@ const LinkSubmitForm: React.FC<LinkSubmitFormProps> = ({ setItems }) => {
         <input
           id='payload'
           className={styles.linkSubmitFormInput}
-          type='url'
+          type='text'
           placeholder='paste post URL here'
           name='payload'
           autoComplete='off'

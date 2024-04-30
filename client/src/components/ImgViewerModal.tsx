@@ -13,7 +13,7 @@ const ImgVieverModal: React.FC<ImgVieverModalProps> = ({
   onClose
 }) => {
   return (
-    <Modal isOpen={isOpen} closeMethod={2} onClose={() => onClose()}>
+    <Modal isOpen={isOpen} hasCloseButton={false} onClose={() => onClose()}>
       <div className={style.container}>
         <img className={style.image} src={url} crossOrigin='anonymous' />
       </div>

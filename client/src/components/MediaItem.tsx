@@ -1,5 +1,6 @@
 import { Media } from '../types'
 import styles from './MediaItem.module.css'
+import useWindowDimensions from '../utils/useWindowDimensions'
 
 interface MediaItemProps {
   media: Media
@@ -21,22 +22,35 @@ const MediaItem: React.FC<MediaItemProps> = ({
     if (event.key === 'Enter') openModal()
   }
 
+  const { width } = useWindowDimensions()
+
   switch (media.type) {
     case 'image/jpeg':
     case 'image/png':
     case 'image/heic':
     case 'image/avif':
-    case 'image/webp':
-      return (
-        <img
-          className={styles.mediaItem + ' ' + styles.image}
-          src={media.url}
-          crossOrigin='anonymous'
-          onClick={() => openModal()}
-          onKeyDown={handleImgKeyDown}
-          tabIndex={0}
-        />
-      )
+    case 'image/webp': {
+      if (width > 500) {
+        return (
+          <img
+            className={`${styles.mediaItem} ${styles.clickable}`}
+            src={media.url}
+            crossOrigin='anonymous'
+            onClick={() => openModal()}
+            onKeyDown={handleImgKeyDown}
+            tabIndex={0}
+          />
+        )
+      } else {
+        return (
+          <img
+            className={styles.mediaItem}
+            src={media.url}
+            crossOrigin='anonymous'
+          />
+        )
+      }
+    }
     case 'video/mp4':
       return (
         <video
