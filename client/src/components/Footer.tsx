@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import DisclaimerModal from './DIsclaimerModal'
+import DisclaimerModal from './Modals/DIsclaimerModal'
 import style from './Footer.module.css'
 
 const Footer = (): JSX.Element => {

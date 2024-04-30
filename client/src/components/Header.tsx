@@ -1,4 +1,4 @@
-import { baseUrl } from '../config'
+import { baseUrl } from '../utils/config'
 import style from './Header.module.css'
 
 const Header = (): JSX.Element => {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { IGItemData } from '../types'
 import MediaItem from './MediaItem'
-import ImgViewerModal from './ImgViewerModal'
+import ImgViewerModal from './Modals/ImgViewerModal'
 import style from './MediaGrid.module.css'
 
 const MediaGrid = ({ items }: { items: IGItemData[] }): JSX.Element => {

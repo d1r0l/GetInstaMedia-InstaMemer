@@ -1,4 +1,4 @@
-import Modal from './Modal/Modal'
+import Modal from './Modal'
 import style from './DisclaimerModal.module.css'
 
 interface DisclaimerModalProps {

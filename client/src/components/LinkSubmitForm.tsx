@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { baseUrl } from '../config'
+import { baseUrl } from '../utils/config'
 import axios, { AxiosError } from 'axios'
 import _ from 'lodash'
 import { IGItemData, SubmitState } from '../types'
