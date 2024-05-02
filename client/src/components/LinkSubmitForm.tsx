@@ -49,7 +49,10 @@ const LinkSubmitForm: React.FC<LinkSubmitFormProps> = ({ setItems }) => {
       ) {
         setErrorMessage(err.response.data.error)
         console.error(err.response.data)
-      } else console.error(err)
+      } else {
+        setErrorMessage('Something went wrong. Please try again later.')
+        console.error(err)
+      }
       setSubmitState(SubmitState.error)
     }
   }
