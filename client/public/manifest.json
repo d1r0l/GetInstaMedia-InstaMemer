@@ -23,5 +23,49 @@
   "start_url": "/?source=pwa",
   "display": "standalone",
   "scope": "/",
-  "description": "An application for downloading media content from Instagram posts"
+  "description": "An application for downloading media content from Instagram posts",
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Homescreen of GetInstaMedia App"
+    },
+    {
+      "src": "/screenshots/desktop-2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Screen of post with two images loaded in GetInstaMedia App"
+    },
+    {
+      "src": "/screenshots/desktop-3.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Image prewiew of GetInstaMedia App"
+    },
+    {
+      "src": "/screenshots/mobile-1.png",
+      "sizes": "269x583",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Homescreen of GetInstaMedia App"
+    },
+    {
+      "src": "/screenshots/mobile-2.png",
+      "sizes": "269x583",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Screen of post with one image loaded in GetInstaMedia App"
+    },
+    {
+      "src": "/screenshots/mobile-3.png",
+      "sizes": "269x583",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Screen of post with two images loaded in GetInstaMedia App"
+    }
+  ]
 }
