@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import { SubmitState } from '../types'
 import styles from './StateIndicator.module.css'
 
@@ -10,6 +12,20 @@ const StateIndicator: React.FC<StateIndicatorProps> = ({
   submitState,
   errorMessage
 }) => {
+  const [errorImgUrl, setErrorImgUrl] = useState('')
+
+  useEffect(() => {
+    const loadErrorImg = async () => {
+      try {
+        const res = await axios.get('./error.svg', { responseType: 'blob' })
+        setErrorImgUrl(URL.createObjectURL(res.data))
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    loadErrorImg()
+  }, [])
+
   switch (submitState) {
     case SubmitState.error:
       return (
@@ -17,7 +33,7 @@ const StateIndicator: React.FC<StateIndicatorProps> = ({
           <div className={styles.errorContainer}>
             <img
               className={styles.errorIcon}
-              src='./error.svg'
+              src={errorImgUrl}
               alt='Error Icon'
             />
             <p className={styles.errorMessage}>{errorMessage}</p>
