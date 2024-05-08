@@ -16,7 +16,7 @@ const bot = async () => {
   });
 
   client.on('ready', () => {
-    console.log('Discord bot is ready.');
+    console.log('Discord bot is ready');
   });
 
   client.on('messageCreate', async (msg) => {

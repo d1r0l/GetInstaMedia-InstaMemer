@@ -19,7 +19,6 @@ const LinkSubmitForm: React.FC<LinkSubmitFormProps> = ({ setItems }) => {
   const [errorMessage, setErrorMessage] = useState<string>('')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(`submitted payload: ${e.currentTarget.payload.value}`)
     e.preventDefault()
     try {
       setItems([])
