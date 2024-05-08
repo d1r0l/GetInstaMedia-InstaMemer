@@ -7,7 +7,6 @@
     "start": "node build/index.js",
     "dev": "clear && ts-node-dev src/index.ts",
     "dev:full": "concurrently \"npm run dev\" \"cd ../client && npm run dev\"",
-    "dev:full:host": "concurrently \"npm run dev:full\" \"cd ../client && npm run dev:host\"",
     "lint": "eslint --ext .ts .",
     "build": "tsc",
     "build:full": "rm -rf client/* && cd ../client && npm run build && cp -rf build/* ../server/client/ && cd ../server && tsc",
