@@ -1,54 +1,37 @@
 import { IGItemData, Media } from '../types'
-import proxyMediaUrl from './proxyMediaUrl'
+import { baseUrl } from './config'
+import axios from 'axios'
+import extToMime from './extToMime'
 
-const typeIGItemsData = (
+const typeIGItemsData = async (
   itemsData: { name: string; medias: string[] }[]
-): IGItemData[] => {
+): Promise<IGItemData[]> => {
+  const fetchBlobUrl = async (url: string) => {
+    try {
+      const res = await axios.get(`${baseUrl}/api/proxy`, {
+        responseType: 'blob',
+        params: { url: btoa(url) }
+      })
+      return URL.createObjectURL(res.data)
+    } catch (error) {
+      console.error(error)
+      return ''
+    }
+  }
+
   const typedIGItemsData: IGItemData[] = []
-  for (let i = 0; i < itemsData.length; i++) {
+  for await (const item of itemsData) {
     const newItemData: IGItemData = {
-      name: itemsData[i].name,
+      name: item.name,
       medias: []
     }
-    for (let j = 0; j < itemsData[i].medias.length; j++) {
-      const extentionMatch = itemsData[i].medias[j].match(/\.([^/\s]*)\?/i)
-      const extention = extentionMatch ? extentionMatch[1].toLowerCase() : ''
+    for await (const media of item.medias) {
+      const extMatch = media.match(/\.([^/\s]*)\?/i)
+      const extention = extMatch ? extMatch[1].toLowerCase() : ''
       const typedMedia: Media = {
-        type: 'unknown',
-        url: proxyMediaUrl(itemsData[i].medias[j]),
-        filename: itemsData[i].name + '_' + (j + 1) + '.' + extention
-      }
-      switch (extention) {
-        case 'jpe':
-        case 'jpeg':
-        case 'jpg':
-        case 'pjpg':
-        case 'jfif':
-        case 'jfif-tbnl':
-        case 'jif':
-          typedMedia.type = 'image/jpeg'
-          break
-        case 'png':
-          typedMedia.type = 'image/png'
-          break
-        case 'heif':
-        case 'heic':
-          typedMedia.type = 'image/heic'
-          break
-        case 'avif':
-        case 'avifs':
-          typedMedia.type = 'image/avif'
-          break
-        case 'webp':
-          typedMedia.type = 'image/webp'
-          break
-        case 'mp4':
-        case 'mp4v':
-        case 'mpg4':
-          typedMedia.type = 'video/mp4'
-          break
-        default:
-          break
+        type: extToMime(extention),
+        url: await fetchBlobUrl(media),
+        filename: item.name + '.' + extention
       }
       newItemData.medias.push(typedMedia)
     }

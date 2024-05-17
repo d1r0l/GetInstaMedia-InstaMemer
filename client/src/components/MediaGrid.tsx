@@ -4,7 +4,11 @@ import MediaItem from './MediaItem'
 import ImgViewerModal from './Modals/ImgViewerModal'
 import style from './MediaGrid.module.css'
 
-const MediaGrid = ({ items }: { items: IGItemData[] }): JSX.Element => {
+interface MediaGridProps {
+  items: IGItemData[]
+}
+
+const MediaGrid: React.FC<MediaGridProps> = ({ items }) => {
   const [imageVieverIsOpen, setImageVieverIsOpen] = useState(false)
   const [imageVieverUrl, setImageVieverUrl] = useState('')
 
@@ -12,7 +16,7 @@ const MediaGrid = ({ items }: { items: IGItemData[] }): JSX.Element => {
     <div className={style.mediaGrid}>
       {items.map(item =>
         item.medias.map(media => (
-          <div key={media.url} className={style.mediaGridChild}>
+          <div key={media.filename} className={style.mediaGridChild}>
             <MediaItem
               media={media}
               setImageVieverUrl={setImageVieverUrl}

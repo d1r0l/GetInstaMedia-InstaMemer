@@ -8,22 +8,26 @@ import typeIGItemsData from '../utils/typeIGItemsData'
 import styles from './LinkSubmitForm.module.css'
 
 interface LinkSubmitFormProps {
+  items: IGItemData[]
   setItems: React.Dispatch<React.SetStateAction<IGItemData[]>>
 }
 
-const LinkSubmitForm: React.FC<LinkSubmitFormProps> = ({ setItems }) => {
-  const handleFocus = (e: React.FormEvent<HTMLInputElement>) => {
-    e.currentTarget.select()
-  }
+const LinkSubmitForm: React.FC<LinkSubmitFormProps> = ({ items, setItems }) => {
   const [submitState, setSubmitState] = useState<SubmitState>(SubmitState.idle)
   const [errorMessage, setErrorMessage] = useState<string>('')
 
+  const handleFocus = (e: React.FormEvent<HTMLInputElement>) =>
+    e.currentTarget.select()
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    items.forEach(item =>
+      item.medias.forEach(media => URL.revokeObjectURL(media.url))
+    )
+    setItems([])
+    setSubmitState(SubmitState.loading)
+    setErrorMessage('')
     try {
-      setItems([])
-      setSubmitState(SubmitState.loading)
-      setErrorMessage('')
       const res = await axios.post(`${baseUrl}/api/getMedia`, {
         payload: e.currentTarget.payload.value
       })
@@ -33,10 +37,12 @@ const LinkSubmitForm: React.FC<LinkSubmitFormProps> = ({ setItems }) => {
         'mediaData' in res.data &&
         _.isArray(res.data.mediaData)
       ) {
-        const mediaData = typeIGItemsData(res.data.mediaData)
+        const mediaData = await typeIGItemsData(res.data.mediaData)
         setItems(mediaData)
+        setSubmitState(SubmitState.idle)
+      } else {
+        setSubmitState(SubmitState.error)
       }
-      setSubmitState(SubmitState.idle)
     } catch (err) {
       if (
         err instanceof AxiosError &&

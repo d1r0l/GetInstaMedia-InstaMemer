@@ -244,8 +244,11 @@ const getPostData = async (postShortCode: string): Promise<PostData> => {
   if (res.headers['set-cookie'])
     cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
 
-  if ('items' in res.data === false)
-    throw new Error('Post response is invalid.');
+  if ('items' in res.data === false) {
+    if ('description' in res.data)
+      throw new Error('Post response message: ' + res.data.description);
+    else throw new Error('Post response is invalid.');
+  }
   if (!_.isArray(res.data.items)) throw new Error('Post data is not an array.');
   if (res.data.items.length === 0) throw new Error('Post have no items.');
 

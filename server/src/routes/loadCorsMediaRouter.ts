@@ -36,16 +36,16 @@ loadCorsMediaRouter.get('/', (async (req, res) => {
     headers: RawAxiosResponseHeaders,
   ): Partial<RawAxiosResponseHeaders> => {
     const filtered: Partial<RawAxiosResponseHeaders> = {};
-    if ('Date' in headers) filtered['Date'] = headers['Date'];
-    if ('Connection' in headers) filtered['Connection'] = headers['Connection'];
-    if ('Last-Modified' in headers)
-      filtered['Last-Modified'] = headers['Last-Modified'];
-    if ('Accept-Ranges' in headers)
-      filtered['Accept-Ranges'] = headers['Accept-Ranges'];
-    if ('Cache-Control' in headers)
-      filtered['Cache-Control'] = headers['Cache-Control'];
-    if ('Content-Type' in headers)
-      filtered['Content-Type'] = headers['Content-Type'];
+    if ('date' in headers) filtered.date = headers.date;
+    if ('connection' in headers) filtered.connection = headers.connection;
+    if ('last-modified' in headers)
+      filtered['last-modified'] = headers['last-modified'];
+    if ('accept-ranges' in headers)
+      filtered['accept-ranges'] = headers['accept-ranges'];
+    if ('cache-control' in headers)
+      filtered['cache-control'] = headers['cache-control'];
+    if ('content-type' in headers)
+      filtered['content-type'] = headers['content-type'];
     return filtered;
   };
 

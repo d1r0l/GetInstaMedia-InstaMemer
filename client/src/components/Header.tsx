@@ -1,7 +1,7 @@
 import { baseUrl } from '../utils/config'
 import style from './Header.module.css'
 
-const Header = (): JSX.Element => {
+const Header: React.FC = () => {
   return (
     <header className={style.header}>
       <h1>
