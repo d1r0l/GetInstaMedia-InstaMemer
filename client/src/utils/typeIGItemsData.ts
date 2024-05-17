@@ -54,7 +54,8 @@ const typeIGItemsData = async (
       const typedMedia: Media = {
         type: extToMime(extention),
         url: await fetchBlobUrl(media),
-        filename: item.name + '_' + item.medias.indexOf(media) + '.' + extention
+        filename:
+          item.name + '_' + (item.medias.indexOf(media) + 1) + '.' + extention
       }
       newItemData.medias.push(typedMedia)
     }
