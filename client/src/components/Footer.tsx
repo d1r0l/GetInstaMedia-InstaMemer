@@ -2,7 +2,7 @@ import { useState } from 'react'
 import DisclaimerModal from './Modals/DIsclaimerModal'
 import style from './Footer.module.css'
 
-const Footer = (): JSX.Element => {
+const Footer: React.FC = () => {
   const [isDisclaimerOpen, setDisclaimerOpen] = useState(false)
 
   return (
