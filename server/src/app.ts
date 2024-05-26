@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import getMediaRouter from './routes/getMediaRouter';
-import loadCorsMediaRouter from './routes/loadCorsMediaRouter';
+import proxy from './routes/proxy';
 import middleware from './utils/middleware';
 
 import https from 'https';
@@ -21,7 +21,7 @@ const app = () => {
   expressApp.use(express.static('./client'));
   expressApp.use(middleware.errorHandler);
   expressApp.use('/api/getMedia', getMediaRouter);
-  expressApp.use('/api/proxy', loadCorsMediaRouter);
+  expressApp.use('/api/proxy', proxy);
 
   const startNotice = () => () =>
     console.log(`Express is ready on port ${port}`);

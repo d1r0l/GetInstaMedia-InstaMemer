@@ -22,6 +22,7 @@ loadCorsMediaRouter.get('/', (async (req, res) => {
   const url = Buffer.from(query.url, 'base64').toString('ascii');
 
   if (!regex.igDbLink.test(url)) {
+    console.log(regex.igDbLink.test(url));
     res.status(400).send({ error: 'Bad url' });
     return;
   }
