@@ -3,10 +3,13 @@ import fs from 'fs';
 
 import dotenv from 'dotenv';
 import axios from 'axios';
+
 import isString from 'lodash/isString';
 import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
-import sodium from 'libsodium-wrappers';
+
+import nacl from 'tweetnacl';
+import blake2b from 'blake2b';
 
 import {
   Cookies,
@@ -93,6 +96,20 @@ const encryptPassword = async (
 ): Promise<string> => {
   const time = Math.floor(Date.now() / 1000).toString();
 
+  const pKeyUint8Array = Uint8Array.from(Buffer.from(pKey, 'hex'));
+  const eKeyPair = nacl.box.keyPair();
+
+  const blake2bHasher = blake2b(
+    nacl.box.nonceLength,
+    undefined,
+    undefined,
+    undefined,
+    true,
+  );
+  blake2bHasher.update(eKeyPair.publicKey);
+  blake2bHasher.update(pKeyUint8Array);
+  const nonce = blake2bHasher.digest();
+
   const key = await crypto.subtle.generateKey(
     {
       name: 'AES-GCM',
@@ -102,13 +119,24 @@ const encryptPassword = async (
     ['encrypt', 'decrypt'],
   );
 
-  const sealedKey = sodium.crypto_box_seal(
-    Buffer.from(await crypto.subtle.exportKey('raw', key)),
-    Buffer.from(pKey, 'hex'),
+  const exportedKey = new Uint8Array(await crypto.subtle.exportKey('raw', key));
+  const sealedKey = nacl.box(
+    exportedKey,
+    nonce,
+    pKeyUint8Array,
+    eKeyPair.secretKey,
   );
 
+  const sealedBox = new Uint8Array(
+    eKeyPair.publicKey.length + sealedKey.length,
+  );
+  sealedBox.set(eKeyPair.publicKey);
+  sealedBox.set(sealedKey, eKeyPair.publicKey.length);
+
+  console.log(sealedBox.length);
+
   const sizeBuffer = Buffer.alloc(2, 0);
-  sizeBuffer.writeInt16LE(sealedKey.byteLength, 0);
+  sizeBuffer.writeInt16LE(sealedBox.byteLength, 0);
 
   const encPass = await crypto.subtle.encrypt(
     {
@@ -124,7 +152,7 @@ const encryptPassword = async (
     Buffer.alloc(1, 1),
     Buffer.alloc(1, pKeyId),
     Buffer.from(sizeBuffer),
-    Buffer.from(sealedKey),
+    Buffer.from(sealedBox),
     Buffer.from(encPass, Buffer.from(encPass).length - 16, 16),
     Buffer.from(encPass, 0, Buffer.from(encPass).length - 16),
   ]).toString('base64');
