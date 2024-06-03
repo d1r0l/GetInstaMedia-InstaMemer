@@ -1,5 +1,6 @@
 import express from 'express';
-import _ from 'lodash';
+import isString from 'lodash/isString';
+import isObject from 'lodash/isObject';
 import igAgent from '../utils/igAgent';
 import regex from '../utils/regex';
 
@@ -8,9 +9,9 @@ const getMediaRouter = express.Router();
 getMediaRouter.post('/', (async (req, res) => {
   if (
     !('body' in req) ||
-    !_.isObject(req.body) ||
+    !isObject(req.body) ||
     !('payload' in req.body) ||
-    !_.isString(req.body.payload)
+    !isString(req.body.payload)
   ) {
     res.status(400).send({ error: 'No payload provided' });
     return;

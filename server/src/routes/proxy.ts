@@ -1,5 +1,6 @@
 import express from 'express';
-import _ from 'lodash';
+import isString from 'lodash/isString';
+import isObject from 'lodash/isObject';
 import axios from 'axios';
 import type { RawAxiosResponseHeaders } from 'axios';
 import regex from '../utils/regex';
@@ -7,14 +8,14 @@ import regex from '../utils/regex';
 const loadCorsMediaRouter = express.Router();
 
 loadCorsMediaRouter.get('/', (async (req, res) => {
-  if (!('query' in req) || !_.isObject(req.query)) {
+  if (!('query' in req) || !isObject(req.query)) {
     res.status(400).send({ error: 'No query provided' });
     return;
   }
 
   const query = req.query;
 
-  if (!('url' in query) || !_.isString(query.url)) {
+  if (!('url' in query) || !isString(query.url)) {
     res.status(400).send({ error: 'No url provided' });
     return;
   }

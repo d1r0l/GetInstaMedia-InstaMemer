@@ -3,7 +3,9 @@ import fs from 'fs';
 
 import dotenv from 'dotenv';
 import axios from 'axios';
-import _ from 'lodash';
+import isString from 'lodash/isString';
+import isObject from 'lodash/isObject';
+import isArray from 'lodash/isArray';
 import sodium from 'libsodium-wrappers';
 
 import {
@@ -49,19 +51,19 @@ const getPublicKeysData = async (): Promise<{
 
   if (
     res.status !== 200 ||
-    !_.isObject(res.data) ||
+    !isObject(res.data) ||
     !('config' in res.data) ||
-    !_.isObject(res.data.config) ||
+    !isObject(res.data.config) ||
     !('csrf_token' in res.data.config) ||
-    !_.isString(res.data.config.csrf_token) ||
+    !isString(res.data.config.csrf_token) ||
     !('encryption' in res.data) ||
-    !_.isObject(res.data.encryption) ||
+    !isObject(res.data.encryption) ||
     !('key_id' in res.data.encryption) ||
-    !_.isString(res.data.encryption.key_id) ||
+    !isString(res.data.encryption.key_id) ||
     !('public_key' in res.data.encryption) ||
-    !_.isString(res.data.encryption.public_key) ||
+    !isString(res.data.encryption.public_key) ||
     !('version' in res.data.encryption) ||
-    !_.isString(res.data.encryption.version)
+    !isString(res.data.encryption.version)
   )
     throw new Error('Cannot get public keys data.');
 
@@ -150,7 +152,7 @@ const isCookiesValid = async (): Promise<boolean> => {
   if (res.headers['set-cookie'])
     cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
 
-  if (_.isObject(res.data) && 'status' in res.data && res.data.status === 'ok')
+  if (isObject(res.data) && 'status' in res.data && res.data.status === 'ok')
     return true;
   else return false;
 };
@@ -249,7 +251,7 @@ const getPostData = async (postShortCode: string): Promise<PostData> => {
       throw new Error('Post response message: ' + res.data.description);
     else throw new Error('Post response is invalid.');
   }
-  if (!_.isArray(res.data.items)) throw new Error('Post data is not an array.');
+  if (!isArray(res.data.items)) throw new Error('Post data is not an array.');
   if (res.data.items.length === 0) throw new Error('Post have no items.');
 
   const postData = res.data.items[0] as unknown;
@@ -281,7 +283,7 @@ const mediaUrlArraySelector = async (
       for (let i = 0; i < postData.image_versions2.candidates.length; i++) {
         const mediaUrl = postData.image_versions2.candidates[i].url;
         const res = await axios.head(mediaUrl);
-        if (_.isString(res.headers['content-length'])) {
+        if (isString(res.headers['content-length'])) {
           const mediaSize = res.headers['content-length'];
           if (isMediaValidSize(mediaSize)) return [mediaUrl];
         } else throw headError;
@@ -291,7 +293,7 @@ const mediaUrlArraySelector = async (
       for (let i = 0; i < postData.video_versions.length; i++) {
         const mediaUrl = postData.video_versions[i].url;
         const res = await axios.head(mediaUrl);
-        if (_.isString(res.headers['content-length'])) {
+        if (isString(res.headers['content-length'])) {
           const mediaSize = res.headers['content-length'];
           if (isMediaValidSize(mediaSize)) return [mediaUrl];
         } else throw headError;
@@ -310,7 +312,7 @@ const mediaUrlArraySelector = async (
             ) {
               const mediaUrl = mediaItem.image_versions2.candidates[j].url;
               const res = await axios.head(mediaUrl);
-              if (_.isString(res.headers['content-length'])) {
+              if (isString(res.headers['content-length'])) {
                 const mediaSize = res.headers['content-length'];
                 if (isMediaValidSize(mediaSize)) {
                   mediaUrlArray.push(mediaUrl);
@@ -323,7 +325,7 @@ const mediaUrlArraySelector = async (
             for (let j = 0; j < mediaItem.video_versions.length; j++) {
               const mediaUrl = mediaItem.video_versions[j].url;
               const res = await axios.head(mediaUrl);
-              if (_.isString(res.headers['content-length'])) {
+              if (isString(res.headers['content-length'])) {
                 const mediaSize = res.headers['content-length'];
                 if (isMediaValidSize(mediaSize)) mediaUrlArray.push(mediaUrl);
                 break;

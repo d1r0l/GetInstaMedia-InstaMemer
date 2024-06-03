@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { baseUrl } from '../utils/config'
 import axios, { AxiosError } from 'axios'
-import _ from 'lodash'
+import isString from 'lodash/isString'
+import isObject from 'lodash/isObject'
+import isArray from 'lodash/isArray'
 import { IGItemData, SubmitState } from '../types'
 import StateIndicator from './StateIndicator'
 import typeIGItemsData from '../utils/typeIGItemsData'
@@ -33,9 +35,9 @@ const LinkSubmitForm: React.FC<LinkSubmitFormProps> = ({ items, setItems }) => {
       })
       if (
         'data' in res &&
-        _.isObject(res.data) &&
+        isObject(res.data) &&
         'mediaData' in res.data &&
-        _.isArray(res.data.mediaData)
+        isArray(res.data.mediaData)
       ) {
         const mediaData = await typeIGItemsData(res.data.mediaData)
         setItems(mediaData)
@@ -48,9 +50,9 @@ const LinkSubmitForm: React.FC<LinkSubmitFormProps> = ({ items, setItems }) => {
         err instanceof AxiosError &&
         err.response &&
         'data' in err.response &&
-        _.isObject(err.response.data) &&
+        isObject(err.response.data) &&
         'error' in err.response.data &&
-        _.isString(err.response.data.error)
+        isString(err.response.data.error)
       ) {
         setErrorMessage(err.response.data.error)
         console.error(err.response.data)

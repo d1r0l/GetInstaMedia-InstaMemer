@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import isString from 'lodash/isString';
+import isObject from 'lodash/isObject';
+import isArray from 'lodash/isArray';
+import isNumber from 'lodash/isNumber';
 
 interface PostBaseData {
   caption: {
@@ -64,27 +67,27 @@ export type PostData = PostBaseData & PostMedia;
 
 export const isPostData = (data: unknown): data is PostData => {
   if (
-    _.isObject(data) &&
+    isObject(data) &&
     'code' in data &&
-    _.isString(data.code) &&
+    isString(data.code) &&
     data.code.length === 11 &&
     'caption' in data &&
     'user' in data &&
-    _.isObject(data.user) &&
+    isObject(data.user) &&
     'username' in data.user &&
-    _.isString(data.user.username) &&
+    isString(data.user.username) &&
     'full_name' in data.user &&
-    _.isString(data.user.full_name) &&
+    isString(data.user.full_name) &&
     'profile_pic_url' in data.user &&
-    _.isString(data.user.profile_pic_url) &&
+    isString(data.user.profile_pic_url) &&
     'media_type' in data &&
-    _.isNumber(data.media_type) &&
+    isNumber(data.media_type) &&
     'product_type' in data &&
-    _.isString(data.product_type) &&
+    isString(data.product_type) &&
     'image_versions2' in data &&
-    _.isObject(data.image_versions2) &&
+    isObject(data.image_versions2) &&
     'candidates' in data.image_versions2 &&
-    _.isArray(data.image_versions2.candidates) &&
+    isArray(data.image_versions2.candidates) &&
     data.image_versions2.candidates.length > 0
   )
     null;
@@ -94,13 +97,13 @@ export const isPostData = (data: unknown): data is PostData => {
       if (data.product_type !== 'feed') return false;
       for (let i = 0; i < data.image_versions2.candidates.length; i++) {
         if (
-          _.isObject(data.image_versions2.candidates[i]) &&
+          isObject(data.image_versions2.candidates[i]) &&
           'width' in data.image_versions2.candidates[i] &&
-          _.isNumber(data.image_versions2.candidates[i].width) &&
+          isNumber(data.image_versions2.candidates[i].width) &&
           'height' in data.image_versions2.candidates[i] &&
-          _.isNumber(data.image_versions2.candidates[i].height) &&
+          isNumber(data.image_versions2.candidates[i].height) &&
           'url' in data.image_versions2.candidates[i] &&
-          _.isString(data.image_versions2.candidates[i].url)
+          isString(data.image_versions2.candidates[i].url)
         )
           null;
         else return false;
@@ -110,33 +113,33 @@ export const isPostData = (data: unknown): data is PostData => {
       if (data.product_type !== 'clips') return false;
       for (let i = 0; i < data.image_versions2.candidates.length; i++) {
         if (
-          _.isObject(data.image_versions2.candidates[i]) &&
+          isObject(data.image_versions2.candidates[i]) &&
           'width' in data.image_versions2.candidates[i] &&
-          _.isNumber(data.image_versions2.candidates[i].width) &&
+          isNumber(data.image_versions2.candidates[i].width) &&
           'height' in data.image_versions2.candidates[i] &&
-          _.isNumber(data.image_versions2.candidates[i].height) &&
+          isNumber(data.image_versions2.candidates[i].height) &&
           'url' in data.image_versions2.candidates[i] &&
-          _.isString(data.image_versions2.candidates[i].url)
+          isString(data.image_versions2.candidates[i].url)
         )
           null;
         else return false;
       }
       if (
         'video_versions' in data &&
-        _.isArray(data.video_versions) &&
+        isArray(data.video_versions) &&
         data.video_versions.length > 0
       )
         null;
       else return false;
       for (let i = 0; i < data.video_versions.length; i++) {
         if (
-          _.isObject(data.video_versions[i]) &&
+          isObject(data.video_versions[i]) &&
           'width' in data.video_versions[i] &&
-          _.isNumber(data.video_versions[i].width) &&
+          isNumber(data.video_versions[i].width) &&
           'height' in data.video_versions[i] &&
-          _.isNumber(data.video_versions[i].height) &&
+          isNumber(data.video_versions[i].height) &&
           'url' in data.video_versions[i] &&
-          _.isString(data.video_versions[i].url)
+          isString(data.video_versions[i].url)
         )
           null;
         else return false;
@@ -146,7 +149,7 @@ export const isPostData = (data: unknown): data is PostData => {
       if (
         data.product_type === 'carousel_container' &&
         'carousel_media' in data &&
-        _.isArray(data.carousel_media) &&
+        isArray(data.carousel_media) &&
         data.carousel_media.length > 0
       )
         null;
@@ -154,15 +157,15 @@ export const isPostData = (data: unknown): data is PostData => {
       for (let i = 0; i < data.carousel_media.length; i++) {
         const mediaData = data.carousel_media[i] as unknown;
         if (
-          _.isObject(mediaData) &&
+          isObject(mediaData) &&
           'media_type' in mediaData &&
-          _.isNumber(mediaData.media_type) &&
+          isNumber(mediaData.media_type) &&
           'product_type' in mediaData &&
           mediaData.product_type === 'carousel_item' &&
           'image_versions2' in mediaData &&
-          _.isObject(mediaData.image_versions2) &&
+          isObject(mediaData.image_versions2) &&
           'candidates' in mediaData.image_versions2 &&
-          _.isArray(mediaData.image_versions2.candidates) &&
+          isArray(mediaData.image_versions2.candidates) &&
           mediaData.image_versions2.candidates.length > 0
         )
           null;
@@ -172,13 +175,13 @@ export const isPostData = (data: unknown): data is PostData => {
             const imageData = mediaData.image_versions2.candidates;
             for (let j = 0; j < imageData.length; j++) {
               if (
-                _.isObject(imageData[j]) &&
+                isObject(imageData[j]) &&
                 'width' in imageData[j] &&
-                _.isNumber(imageData[j].width) &&
+                isNumber(imageData[j].width) &&
                 'height' in imageData[j] &&
-                _.isNumber(imageData[j].height) &&
+                isNumber(imageData[j].height) &&
                 'url' in imageData[j] &&
-                _.isString(imageData[j].url)
+                isString(imageData[j].url)
               )
                 null;
               else return false;
@@ -188,20 +191,20 @@ export const isPostData = (data: unknown): data is PostData => {
             const videoPicData = mediaData.image_versions2.candidates;
             for (let j = 0; j < videoPicData.length; j++) {
               if (
-                _.isObject(videoPicData[j]) &&
+                isObject(videoPicData[j]) &&
                 'width' in videoPicData[j] &&
-                _.isNumber(videoPicData[j].width) &&
+                isNumber(videoPicData[j].width) &&
                 'height' in videoPicData[j] &&
-                _.isNumber(videoPicData[j].height) &&
+                isNumber(videoPicData[j].height) &&
                 'url' in videoPicData[j] &&
-                _.isString(videoPicData[j].url)
+                isString(videoPicData[j].url)
               )
                 null;
               else return false;
             }
             if (
               'video_versions' in mediaData &&
-              _.isArray(mediaData.video_versions) &&
+              isArray(mediaData.video_versions) &&
               mediaData.video_versions.length > 0
             )
               null;
@@ -209,13 +212,13 @@ export const isPostData = (data: unknown): data is PostData => {
             for (let j = 0; j < mediaData.video_versions.length; j++) {
               const videoData = mediaData.video_versions[j] as unknown;
               if (
-                _.isObject(videoData) &&
+                isObject(videoData) &&
                 'width' in videoData &&
-                _.isNumber(videoData.width) &&
+                isNumber(videoData.width) &&
                 'height' in videoData &&
-                _.isNumber(videoData.height) &&
+                isNumber(videoData.height) &&
                 'url' in videoData &&
-                _.isString(videoData.url)
+                isString(videoData.url)
               )
                 null;
               else return false;
