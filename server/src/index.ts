@@ -1,7 +1,9 @@
-import bot from './bot';
-import app from './app';
+import { igAgentStart } from './instagram/igAgent';
+import discordApp from './discord/discordApp';
+import expressApp from './express/expressApp';
 
 console.log(`Starting server in ${process.env.NODE_ENV} mode`);
 
-bot().catch(console.error);
-app();
+igAgentStart();
+discordApp();
+expressApp();

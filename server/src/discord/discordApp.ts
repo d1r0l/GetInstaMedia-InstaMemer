@@ -1,11 +1,12 @@
 import dotenv from 'dotenv';
 import { Client, GatewayIntentBits } from 'discord.js';
 
-import messageHandler from './messageHandler';
+import messageHandler from '../discord/messageHandler';
+import errorHandler from '../utils/errorHandler';
 
 dotenv.config();
 
-const bot = async () => {
+const bot = () => {
   const token = process.env.DISCORD_TOKEN;
   const client = new Client({
     intents: [
@@ -14,6 +15,8 @@ const bot = async () => {
       GatewayIntentBits.MessageContent,
     ],
   });
+
+  client.on('error', errorHandler);
 
   client.on('ready', () => {
     console.log('Discord bot is ready');
@@ -36,14 +39,7 @@ const bot = async () => {
     }
   });
 
-  try {
-    if (!token) throw new Error('No Discord token provided.');
-    await client.login(token);
-  } catch (error) {
-    if (process.env.NODE_ENV === 'production') {
-      if (error instanceof Error) console.error('Error: ' + error.message);
-    } else console.error(error);
-  }
+  client.login(token).catch(errorHandler);
 };
 
 export default bot;

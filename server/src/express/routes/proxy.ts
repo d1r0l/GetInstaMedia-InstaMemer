@@ -3,7 +3,7 @@ import isString from 'lodash/isString';
 import isObject from 'lodash/isObject';
 import axios from 'axios';
 import type { RawAxiosResponseHeaders } from 'axios';
-import regex from '../utils/regex';
+import regex from '../../utils/regex';
 
 const loadCorsMediaRouter = express.Router();
 

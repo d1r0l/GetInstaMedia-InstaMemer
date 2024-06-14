@@ -15,6 +15,7 @@ const messageHandler = async (
 
       if (igLinkMatch) {
         const postShortCode = igLinkMatch[1];
+
         const postData = await igAgent.getPostData(postShortCode);
         const mediaUrlArray = await igAgent.mediaUrlArraySelector(
           postData,

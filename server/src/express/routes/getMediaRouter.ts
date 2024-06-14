@@ -1,8 +1,8 @@
 import express from 'express';
 import isString from 'lodash/isString';
 import isObject from 'lodash/isObject';
-import igAgent from '../utils/igAgent';
-import regex from '../utils/regex';
+import igAgent from '../../utils/igAgent';
+import regex from '../../utils/regex';
 
 const getMediaRouter = express.Router();
 
