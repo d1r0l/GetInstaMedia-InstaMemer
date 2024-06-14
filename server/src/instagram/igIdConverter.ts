@@ -3,7 +3,7 @@ const UPPER = LOWER.toUpperCase();
 const NUMBERS = '0123456789';
 const ALPHABET = UPPER + LOWER + NUMBERS + '-_';
 
-const mediaIdToShortcode = (mediaId: string) => {
+const mediaIdToShortcode = (mediaId: string): string => {
   let bigIntMediaId = BigInt(mediaId);
   const shortcode = [];
   while (bigIntMediaId > 0) {
@@ -14,7 +14,7 @@ const mediaIdToShortcode = (mediaId: string) => {
   return shortcode.join('');
 };
 
-const shortcodeToMediaId = (shortcode: string) => {
+const shortcodeToMediaId = (shortcode: string): string => {
   let mediaId = BigInt(0);
   const shortcodeArray = shortcode.split('');
   while (shortcodeArray.length > 0) {

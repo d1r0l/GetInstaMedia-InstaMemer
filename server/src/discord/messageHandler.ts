@@ -1,6 +1,11 @@
 import { Message, TextBasedChannel } from 'discord.js';
 import regex from '../utils/regex';
-import igAgent from '../utils/igAgent';
+import igAgent from '../instagram/igAgent';
+import igMediaSelector from '../instagram/igMediaSelector';
+import igIdConverter from '../instagram/igIdConverter';
+import type MediaInfoResponseItems from '../instagram/igPostDataType';
+
+const baseUrl = igAgent.state.constants.WEBHOST;
 
 const messageHandler = async (
   msg: Message<boolean>,
@@ -15,10 +20,11 @@ const messageHandler = async (
 
       if (igLinkMatch) {
         const postShortCode = igLinkMatch[1];
+        const igPostId = igIdConverter.shortcodeToMediaId(postShortCode);
 
-        const postData = await igAgent.getPostData(postShortCode);
-        const mediaUrlArray = await igAgent.mediaUrlArraySelector(
-          postData,
+        const postData = await igAgent.media.info(igPostId);
+        const mediaUrlArray = await igMediaSelector(
+          postData.items as MediaInfoResponseItems[],
           25 * 1024 * 1024,
         );
         const embed: {
@@ -36,19 +42,20 @@ const messageHandler = async (
           };
         } = {
           color: 0xe1306c,
-          url: `${igAgent.baseUrl}/p/${postShortCode}/`,
+          url: `${baseUrl}/p/${postShortCode}/`,
           author: {
-            name: postData.user.full_name,
-            icon_url: postData.user.profile_pic_url,
-            url: `${igAgent.baseUrl}/${postData.user.username}`,
+            name: postData.items[0].user.full_name,
+            icon_url: postData.items[0].user.profile_pic_url,
+            url: `${baseUrl}/${postData.items[0].user.username}`,
           },
           footer: {
             text: 'Instagram',
-            icon_url: `${igAgent.baseUrl}/static/images/ico/favicon-192.png/68d99ba29cc8.png`,
+            icon_url: `${baseUrl}/static/images/ico/favicon-192.png/68d99ba29cc8.png`,
           },
         };
 
-        if (postData.caption) embed.description = postData.caption.text;
+        if (postData.items[0].caption)
+          embed.description = postData.items[0].caption.text;
 
         const responseMessage = {
           files: mediaUrlArray,
