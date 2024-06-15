@@ -1,7 +1,7 @@
 import { Message, TextBasedChannel } from 'discord.js';
 import regex from '../utils/regex';
 import igAgent from '../instagram/igAgent';
-import igMediaSelector from '../instagram/igMediaSelector';
+import igMediaSizeSelector from '../instagram/igMediaSizeSelector';
 import igIdConverter from '../instagram/igIdConverter';
 import type MediaInfoResponseItems from '../instagram/igPostDataType';
 
@@ -23,7 +23,7 @@ const messageHandler = async (
         const igPostId = igIdConverter.shortcodeToMediaId(postShortCode);
 
         const postData = await igAgent.media.info(igPostId);
-        const mediaUrlArray = await igMediaSelector(
+        const mediaUrlArray = await igMediaSizeSelector(
           postData.items as MediaInfoResponseItems[],
           25 * 1024 * 1024,
         );

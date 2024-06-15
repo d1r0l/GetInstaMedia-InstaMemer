@@ -2,7 +2,7 @@ import type MediaInfoResponseItems from './igPostDataType';
 import axios from 'axios';
 import { isString } from 'lodash';
 
-const igMediaSelector = async (
+const igMediaSizeSelector = async (
   MediaItems: MediaInfoResponseItems[],
   maxSize?: number,
 ): Promise<string[]> => {
@@ -94,4 +94,4 @@ const igMediaSelector = async (
   throw new Error('No media found.');
 };
 
-export default igMediaSelector;
+export default igMediaSizeSelector;
