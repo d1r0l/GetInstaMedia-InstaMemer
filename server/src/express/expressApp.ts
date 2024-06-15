@@ -1,10 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-
 import getMediaRouter from './routes/getMediaRouter';
 import proxy from './routes/proxy';
-import middleware from './middleware';
-
+import errors from './middleware/errors';
 import https from 'https';
 import fs from 'fs';
 
@@ -19,7 +17,7 @@ const expressApp = () => {
 
   app.use(express.json());
   app.use(express.static('./client'));
-  app.use(middleware.errors);
+  app.use(errors);
   app.use('/api/getMedia', getMediaRouter);
   app.use('/api/proxy', proxy);
 

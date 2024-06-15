@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import errorHandler from '../utils/errorHandler';
+import errorHandler from '../../utils/errorHandler';
 
 const errors = (
   err: Error,
@@ -11,4 +11,4 @@ const errors = (
   next(err);
 };
 
-export default { errors };
+export default errors;

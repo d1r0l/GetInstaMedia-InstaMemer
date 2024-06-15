@@ -1,8 +1,11 @@
 import express from 'express';
 import isString from 'lodash/isString';
 import isObject from 'lodash/isObject';
-import igAgent from '../../utils/igAgent';
+import igAgent from '../../instagram/igAgent';
+import igIdConverter from '../../instagram/igIdConverter';
+import igMediaSizeSelector from '../../instagram/igMediaSizeSelector';
 import regex from '../../utils/regex';
+import type MediaInfoResponseItems from '../../instagram/igPostDataType';
 
 const getMediaRouter = express.Router();
 
@@ -38,8 +41,11 @@ getMediaRouter.post('/', (async (req, res) => {
     if (igLinkMatch) {
       linkDefined = true;
       const postShortCode = igLinkMatch[1];
-      const postData = await igAgent.getPostData(postShortCode);
-      const mediaUrlArray = await igAgent.mediaUrlArraySelector(postData);
+      const postId = igIdConverter.shortcodeToMediaId(postShortCode);
+      const postData = await igAgent.media.info(postId);
+      const mediaUrlArray = await igMediaSizeSelector(
+        postData.items as MediaInfoResponseItems[],
+      );
       if (mediaUrlArray.length === 0)
         throw new Error(`No media found in IG link ${postShortCode}`);
       mediaData.push({

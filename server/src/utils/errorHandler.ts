@@ -1,12 +1,15 @@
+import { nanoid } from 'nanoid';
+
 const errorHandler = (error: unknown) => {
   if (process.env.NODE_ENV === 'production') {
-    if (error instanceof Error) console.error('Error: ' + error.message);
+    if (error instanceof Error) console.error('Error: ' + error.name);
     else console.log('Something went wrong.');
   } else {
     if (error instanceof Error) {
-      console.error('<========== Error message start ==========>');
+      const errorId = nanoid();
+      console.error(`<========== Error ${errorId} start ==========>`);
       console.error(error);
-      console.error('<==========  Error message end  ==========>');
+      console.error(`<=========== Error ${errorId} end ===========>`);
     }
   }
 };
