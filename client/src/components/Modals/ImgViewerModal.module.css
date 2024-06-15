@@ -1,0 +1,9 @@
+.container {
+  max-height: 95dvh;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  max-height: calc(95dvh - 2px);
+}

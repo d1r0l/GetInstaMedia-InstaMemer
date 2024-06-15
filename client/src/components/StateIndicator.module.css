@@ -1,0 +1,41 @@
+.stateContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading {
+  margin: 2rem;
+  width: 50px;
+  height: 50px;
+  padding: 8px;
+  border-radius: 50%;
+  background: #888888;
+  --_m: 
+    conic-gradient(#0000 10%,#000),
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+          mask: var(--_m);
+  -webkit-mask-composite: source-out;
+          mask-composite: subtract;
+  animation: loading 1s infinite linear;
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.errorIcon {
+  margin: calc(2rem - 8px);
+  width: 70px;
+  height: 70px;
+}
+
+.errorMessage {
+  color: #f18e96;
+  text-align: center;
+}
+
+@keyframes loading {to{transform: rotate(1turn)}}

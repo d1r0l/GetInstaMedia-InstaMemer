@@ -1,0 +1,10 @@
+.footer {
+  margin-top: 2rem;
+}
+
+.disclaimerButton {
+  cursor: pointer;
+  padding-block: 1rem;
+  width: 100%;
+  border-radius: 0;
+}

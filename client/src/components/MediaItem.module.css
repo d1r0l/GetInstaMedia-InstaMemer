@@ -1,0 +1,25 @@
+.mediaItem {
+  border-radius: 6px;
+  height: 100%;
+  object-fit: contain;
+  background-color: black;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.unknownItem {
+  min-height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  background-color: dimgray;
+  border-radius: 6px;
+}
+
+.unknownItemSpan {
+  color: white;
+  font-size: 1.5rem;
+}
