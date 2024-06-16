@@ -8,7 +8,7 @@
 
 # production
 /server/client
-*/build
+**/build
 */oldVersions
 
 # misc
