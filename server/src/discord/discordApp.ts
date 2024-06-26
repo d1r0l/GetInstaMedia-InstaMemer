@@ -4,6 +4,11 @@ import { envMode, discordToken } from '../utils/config';
 import messageHandler from '../discord/messageHandler';
 import errorHandler from '../utils/errorHandler';
 
+/**
+ * Initializes and starts a Discord bot.
+ *
+ * @return {void} This function does not return anything.
+ */
 const bot = () => {
   const token = discordToken;
   const client = new Client({

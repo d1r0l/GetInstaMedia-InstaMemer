@@ -1,11 +1,9 @@
-import { envMode } from './utils/config';
+import startupLogger from './utils/startupLogger';
 import { igAgentStart } from './instagram/igAgent';
 import discordApp from './discord/discordApp';
 import expressApp from './express/expressApp';
-import logConnectionIp from './utils/logConnectionIp';
 
-console.log(`Starting server in ${envMode} mode`);
-logConnectionIp();
+startupLogger();
 
 igAgentStart();
 discordApp();

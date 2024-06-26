@@ -27,6 +27,11 @@ const login = async () => {
   );
 };
 
+/**
+ * Executes the login process and handles any errors that occur.
+ *
+ * @return {Promise<void>} A promise that resolves when the login process is complete.
+ */
 const igAgentStart = () => {
   login().catch(errorHandler);
 };
