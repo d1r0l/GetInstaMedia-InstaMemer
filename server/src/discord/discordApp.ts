@@ -1,13 +1,11 @@
-import dotenv from 'dotenv';
 import { Client, GatewayIntentBits } from 'discord.js';
+import { envMode, discordToken } from '../utils/config';
 
 import messageHandler from '../discord/messageHandler';
 import errorHandler from '../utils/errorHandler';
 
-dotenv.config();
-
 const bot = () => {
-  const token = process.env.DISCORD_TOKEN;
+  const token = discordToken;
   const client = new Client({
     intents: [
       GatewayIntentBits.Guilds,
@@ -34,7 +32,7 @@ const bot = () => {
           messageHandler(msg, channel).catch(errorHandler);
         })();
       } catch (error) {
-        if (process.env.NODE_ENV === 'production') {
+        if (envMode === 'production') {
           if (error instanceof Error) console.error('Error: ' + error.message);
         } else console.error(error);
       }
