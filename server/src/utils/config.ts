@@ -31,14 +31,15 @@ const getProxy = () => {
   if (
     isString(proxyProt) &&
     isString(proxyHost) &&
-    isNumber(proxyPort) &&
+    isString(proxyPort) &&
+    isNumber(parseInt(proxyPort)) &&
     isString(proxyUser) &&
     isString(proxyPass)
   )
     return {
       protocol: proxyProt,
       host: proxyHost,
-      port: proxyPort,
+      port: parseInt(proxyPort),
       auth: {
         username: proxyUser,
         password: proxyPass,
