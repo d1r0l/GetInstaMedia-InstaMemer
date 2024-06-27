@@ -11,14 +11,12 @@ const errorHandler = (error: unknown) => {
     if (error instanceof Error) {
       const errorId = nanoid();
 
-      console.error(`Error ${errorId}`);
+      console.error(`Error ${error.name}: ${errorId}`);
 
       const filename = `${error.name}_${errorId}.txt`;
 
       let parsedError = `${error.name}\n${error.message}`;
       if (error.stack) parsedError += `\n${error.stack}`;
-
-      console.error(parsedError);
 
       if (!fs.existsSync('./errors')) fs.mkdirSync('./errors');
       fs.writeFileSync(`./errors/${filename}`, parsedError);
