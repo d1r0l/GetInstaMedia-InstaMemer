@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import { envMode, igCredentials, axiosProxy } from './config';
 import axios from 'axios';
 import _ from 'lodash';
 import sodium from 'libsodium-wrappers';
@@ -10,7 +10,6 @@ import {
 } from './cookiesParser';
 import { PostData, isPostData } from './igAgentTypes';
 import fs from 'fs';
-dotenv.config();
 
 const baseUrl = 'https://www.instagram.com';
 const apiUrl = 'https://www.instagram.com/api/v1';
@@ -20,7 +19,7 @@ const userAgent =
   'Mobile/15E148 Instagram 142.0.0.22.109 ' +
   '(iPhone12,5; iOS 14_1; en_US; en-US; scale=3.00; 1242x2688; 214888322) NW/1';
 let cookies: Cookies = {};
-if (process.env.NODE_ENV !== 'production') {
+if (envMode !== 'production') {
   if (fs.existsSync('cookies/igCookies.json'))
     cookies = JSON.parse(
       fs.readFileSync('cookies/igCookies.json', 'utf8'),
@@ -41,6 +40,7 @@ const getPublicKeysData = async (): Promise<{
     },
     maxRedirects: 0,
     validateStatus: () => true,
+    proxy: axiosProxy,
   });
 
   if (
@@ -72,7 +72,11 @@ const getPublicKeysData = async (): Promise<{
       publicKey,
       publicKeyVersion,
     };
-  } else throw new Error('Cannot get public keys data.');
+  } else {
+    console.log('Status: ' + res.status);
+    console.log('Data:' + JSON.stringify(res.data, null, 2));
+    throw new Error('Cannot get public keys data.');
+  }
 };
 
 const encryptPassword = async (
@@ -136,6 +140,7 @@ const isCookiesValid = async (): Promise<boolean> => {
     },
     maxRedirects: 0,
     validateStatus: () => true,
+    proxy: axiosProxy,
   });
 
   if (res.headers['set-cookie'])
@@ -147,7 +152,7 @@ const isCookiesValid = async (): Promise<boolean> => {
 };
 
 const getIgCookies = async (): Promise<void> => {
-  if (!process.env.IG_USERNAME || !process.env.IG_PASSWORD)
+  if (!igCredentials)
     throw new Error('No Instagram username or password provided.');
 
   const keys = await getPublicKeysData();
@@ -157,7 +162,7 @@ const getIgCookies = async (): Promise<void> => {
     keys.publicKeyId,
     keys.publicKey,
     keys.publicKeyVersion,
-    process.env.IG_PASSWORD,
+    igCredentials.password,
   );
 
   const req = {
@@ -174,10 +179,11 @@ const getIgCookies = async (): Promise<void> => {
       optIntoOneTap: false,
       queryParams: '{}',
       trustedDeviceRecords: '{}',
-      username: process.env.IG_USERNAME,
+      username: igCredentials.username,
     },
     maxRedirects: 0,
     validateStatus: () => true,
+    proxy: axiosProxy,
   };
 
   const res = await axios(req);
@@ -194,7 +200,7 @@ const getIgCookies = async (): Promise<void> => {
     throw new Error('Response message: ' + res.data.message);
   if (!res.headers['set-cookie']) throw new Error('Cookies not found.');
   cookies = updateCookiesFromSetHeader(res.headers['set-cookie'], cookies);
-  if (process.env.NODE_ENV !== 'production')
+  if (envMode !== 'production')
     fs.writeFileSync(
       'cookies/igCookies.json',
       JSON.stringify(cookies, null, 2),
@@ -223,6 +229,7 @@ const getPostData = async (postShortCode: string): Promise<PostData> => {
     },
     maxRedirects: 0,
     validateStatus: () => true,
+    proxy: axiosProxy,
   });
 
   if (res.status !== 200)
