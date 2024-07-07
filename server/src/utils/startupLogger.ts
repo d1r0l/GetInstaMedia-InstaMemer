@@ -1,7 +1,7 @@
 import axios from 'axios';
 import errorHandler from './errorHandler';
-import { axiosProxy } from './config';
 import { envMode } from './config';
+import { proxy } from './config';
 
 interface MyIpResponse {
   ip: string;
@@ -22,7 +22,7 @@ const startupLogger = () => {
   axios({
     method: 'get',
     url: 'https://api.myip.com',
-    proxy: axiosProxy,
+    proxy: proxy,
   })
     .then((res) => {
       const resData = res.data as MyIpResponse;
