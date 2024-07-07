@@ -1,13 +1,14 @@
-import { IgApiClient } from 'instagram-private-api';
+import { igApiClientExtended } from './agent/igApiClientExtended';
 import { igCredentials, proxyUrl } from '../utils/config';
 import errorHandler from '../utils/errorHandler';
 
-const igAgent = new IgApiClient();
+const igAgent = new igApiClientExtended();
 
 const login = async () => {
   if (!igCredentials)
-    throw new Error('No Instagram username or password provided.');
+    throw new Error('No Instagram username or password provided');
 
+  igAgent.session.load();
   igAgent.state.generateDevice(igCredentials.username);
 
   if (proxyUrl) igAgent.state.proxyUrl = proxyUrl;
@@ -19,11 +20,15 @@ const login = async () => {
     igCredentials.password,
   );
 
-  if (!loggedInUser) throw new Error('Cannot login to Instagram.');
-  else console.log(`Logged in as ${loggedInUser.username}.`);
+  if (!loggedInUser) throw new Error('Cannot login to Instagram');
+  else console.log(`Logged in as ${loggedInUser.username}`);
 
-  process.nextTick(
-    async () => await igAgent.simulate.postLoginFlow().catch(errorHandler),
+  igAgent.session.save();
+
+  igAgent.request.end$.subscribe(() => igAgent.session.save());
+
+  process.nextTick(() =>
+    igAgent.simulateAddon.postLoginFlow().catch(errorHandler),
   );
 };
 
