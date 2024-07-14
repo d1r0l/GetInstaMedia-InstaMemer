@@ -4,11 +4,11 @@ import errorHandler from '../../utils/errorHandler';
 const errors = (
   err: Error,
   _req: Request,
-  _res: Response,
-  next: NextFunction,
+  res: Response,
+  _next: NextFunction,
 ): void => {
   errorHandler(err);
-  next(err);
+  res.status(500).json({ error: 'Internal Server Error' });
 };
 
 export default errors;
