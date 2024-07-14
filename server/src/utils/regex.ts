@@ -6,7 +6,6 @@ const igDbArray = [
 ];
 
 const igDbLink = new RegExp(igDbArray.map((r) => r.source).join('|'));
-console.log(igDbLink);
 
 const regex = {
   igLink,
