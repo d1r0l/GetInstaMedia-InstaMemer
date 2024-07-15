@@ -8,28 +8,34 @@ const login = async () => {
   if (!igCredentials)
     throw new Error('No Instagram username or password provided');
 
-  igAgent.session.load();
-  igAgent.state.generateDevice(igCredentials.username);
-
   if (proxyUrl) igAgent.state.proxyUrl = proxyUrl;
 
-  await igAgent.simulate.preLoginFlow();
+  igAgent.state.generateDevice(igCredentials.username);
+  await igAgent.session.load();
+  if (igAgent.state.authorization) {
+    const loggedUserInfo = await igAgent.user.info(
+      igAgent.state.extractUserId(),
+    );
+    console.log(`Logged in as ${loggedUserInfo.username}`);
+  } else {
+    console.log('Session load failed, signing in normally');
 
-  const loggedInUser = await igAgent.account.login(
-    igCredentials.username,
-    igCredentials.password,
-  );
+    await igAgent.simulate.preLoginFlow();
 
-  if (!loggedInUser) throw new Error('Cannot login to Instagram');
-  else console.log(`Logged in as ${loggedInUser.username}`);
+    const loggedInUser = await igAgent.account.login(
+      igCredentials.username,
+      igCredentials.password,
+    );
 
-  igAgent.session.save();
+    if (!loggedInUser) throw new Error('Cannot login to Instagram');
+    else console.log(`Logged in as ${loggedInUser.username}`);
+
+    await igAgent.simulateAddon.postLoginFlow();
+
+    igAgent.session.save();
+  }
 
   igAgent.request.end$.subscribe(() => igAgent.session.save());
-
-  process.nextTick(() =>
-    igAgent.simulateAddon.postLoginFlow().catch(errorHandler),
-  );
 };
 
 /**
