@@ -172,4 +172,12 @@ export class Session extends Repository {
     this.client.state.authorization = sessionData.authorization;
     console.log('State loaded successfully');
   };
+
+  public clear = async () => {
+    await this.client.state.deserialize({});
+    delete this.client.state.igWWWClaim;
+    delete this.client.state.passwordEncryptionKeyId;
+    delete this.client.state.passwordEncryptionPubKey;
+    delete this.client.state.authorization;
+  };
 }
