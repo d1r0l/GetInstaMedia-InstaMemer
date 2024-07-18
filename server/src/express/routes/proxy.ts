@@ -5,9 +5,9 @@ import axios from 'axios';
 import type { RawAxiosResponseHeaders } from 'axios';
 import regex from '../../utils/regex';
 
-const loadCorsMediaRouter = express.Router();
+const proxy = express.Router();
 
-loadCorsMediaRouter.get('/', (async (req, res) => {
+proxy.get('/', (async (req, res) => {
   if (!('query' in req) || !isObject(req.query)) {
     res.status(400).send({ error: 'No query provided' });
     return;
@@ -56,4 +56,4 @@ loadCorsMediaRouter.get('/', (async (req, res) => {
     .send(igRes.data);
 }) as express.RequestHandler);
 
-export default loadCorsMediaRouter;
+export default proxy;

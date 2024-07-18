@@ -16,7 +16,7 @@ getMediaRouter.post('/', (async (req, res) => {
     !('payload' in req.body) ||
     !isString(req.body.payload)
   ) {
-    res.status(400).send({ error: 'No payload provided' });
+    res.status(400).send({ error: 'No URLs provided' });
     return;
   }
 
@@ -25,7 +25,7 @@ getMediaRouter.post('/', (async (req, res) => {
   const links = payloadParts.filter((part) => part.match(/http/));
 
   if (links.length === 0) {
-    res.status(400).send({ error: 'No links in payload found' });
+    res.status(400).send({ error: 'No valid URLs provided' });
     return;
   }
 
@@ -58,7 +58,7 @@ getMediaRouter.post('/', (async (req, res) => {
 
   if (mediaData.length === 0) {
     res.status(400).send({
-      error: 'No media found in payload',
+      error: 'No media found in provided URLs',
       ...(undefinedLinks ? undefinedLinks : {}),
     });
     return;

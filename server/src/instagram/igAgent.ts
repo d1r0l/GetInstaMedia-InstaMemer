@@ -25,8 +25,8 @@ const login = async () => {
       igCredentials.username,
       igCredentials.password,
     );
-    if (!currentUser) throw new Error('Cannot login to Instagram');
-    else console.log(`Logged in as ${currentUser.username}`);
+    if (currentUser) console.log(`Logged in as ${currentUser.username}`);
+    else throw new Error('Cannot login to Instagram');
     await igAgent.simulateAddon.postLoginFlow();
     igAgent.session.save();
   }
