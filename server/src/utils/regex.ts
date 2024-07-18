@@ -1,8 +1,8 @@
 const igLink =
-  /https?:\/\/(?:www\.)?instagram\.com\/\w+\/([-a-zA-Z0-9@:%._+~#=]{11,})/i;
+  /https?:\/\/(?:www\.)?instagram.com\/\w+\/([-a-zA-Z0-9@:%._+~#=]{11,})/i;
 const igDbArray = [
-  /https:\/\/instagram.f[a-z]{3}[0-9]{1,2}-[0-9].fna.fbcdn.net\//,
-  /https:\/\/scontent.cdninstagram.com\//,
+  /https?:\/\/instagram.[\w\d-]{0,}.fna.fbcdn.net\//,
+  /https?:\/\/scontent[\w\d-]{0,}.cdninstagram.com\//,
 ];
 
 const igDbLink = new RegExp(igDbArray.map((r) => r.source).join('|'));
