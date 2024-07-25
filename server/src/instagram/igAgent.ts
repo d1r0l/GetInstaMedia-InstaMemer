@@ -36,6 +36,18 @@ const login = async () => {
       igAgent.session.save();
     },
   });
+
+  const sessionMaintaining = () => {
+    setTimeout(
+      () => {
+        igAgent.account.currentUser().catch(errorHandler);
+        sessionMaintaining();
+      },
+      (30 + 30 * Math.random()) * 60 * 1000,
+    );
+  };
+
+  sessionMaintaining();
 };
 
 /**
