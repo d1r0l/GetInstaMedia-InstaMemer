@@ -128,30 +128,22 @@ export class Session extends Repository {
 
   private saveRoutine = async () => {
     this.isSavingCurrently = true;
-    try {
-      if (!fs.existsSync(this.sessionDirPath))
-        fs.mkdirSync(this.sessionDirPath);
-      const sessionData = (await this.client.state.serialize()) as SessionData;
-      if ('constants' in sessionData) delete sessionData.constants;
-      fs.writeFileSync(this.sessionPath, JSON.stringify(sessionData), 'utf-8');
-    } catch {
-      console.log('State saving failed');
-    }
+    if (!fs.existsSync(this.sessionDirPath)) fs.mkdirSync(this.sessionDirPath);
+    const sessionData = (await this.client.state.serialize()) as SessionData;
+    if ('constants' in sessionData) delete sessionData.constants;
+    fs.writeFileSync(this.sessionPath, JSON.stringify(sessionData), 'utf-8');
   };
 
   public save = () => {
     if (this.isSavingCurrently) return;
     this.saveRoutine()
-      .then(() => (this.isSavingCurrently = false))
-      .catch((err) => {
-        console.log(err);
-        this.isSavingCurrently = false;
-      });
+      .catch(() => console.log('Session saving failed'))
+      .finally(() => (this.isSavingCurrently = false));
   };
 
   public load = async () => {
     if (!this.isSaveExists) {
-      console.log('State not found');
+      console.log('Session not found');
       return;
     }
 
@@ -170,7 +162,7 @@ export class Session extends Repository {
     this.client.state.passwordEncryptionPubKey =
       sessionData.passwordEncryptionPubKey;
     this.client.state.authorization = sessionData.authorization;
-    console.log('State loaded successfully');
+    console.log('Session loaded successfully');
   };
 
   public clear = async () => {
