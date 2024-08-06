@@ -14,10 +14,8 @@ import fs from 'fs';
  * is set to 'development', CORS is enabled for all requests. The application listens on the
  * specified port and logs a message when it is ready. If the environment mode is set to
  * 'development', the application also serves HTTPS requests using a self-signed certificate.
- *
- * @return {void} This function does not return a value.
  */
-const expressApp = () => {
+const expressApp = (): void => {
   const port = expressPort;
   const app = express();
 

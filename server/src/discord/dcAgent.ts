@@ -1,34 +1,33 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import { envMode, discordToken } from '../utils/config';
 
-import messageHandler from '../discord/messageHandler';
+import messageHandler from './messageHandler';
 import errorHandler from '../utils/errorHandler';
 
+const dcAgent = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+  ],
+});
+
 /**
- * Initializes and starts a Discord bot.
- *
- * @return {void} This function does not return anything.
+ * Initializes and starts a Discord client.
  */
-const bot = () => {
+export const dcAgentStart = (): void => {
   const token = discordToken;
-  const client = new Client({
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMessages,
-      GatewayIntentBits.MessageContent,
-    ],
-  });
 
-  client.on('error', errorHandler);
+  dcAgent.on('error', errorHandler);
 
-  client.on('ready', () => {
+  dcAgent.on('ready', () => {
     console.log('Discord bot is ready');
   });
 
-  client.on('messageCreate', (msg) => {
-    if (msg.author?.id !== client.user?.id) {
+  dcAgent.on('messageCreate', (msg) => {
+    if (msg.author?.id !== dcAgent.user?.id) {
       try {
-        const channel = client.channels.cache.get(msg.channelId);
+        const channel = dcAgent.channels.cache.get(msg.channelId);
         if (!channel)
           throw new Error('Cannot find channel for incoming message.');
         if (!channel.isTextBased())
@@ -44,7 +43,7 @@ const bot = () => {
     }
   });
 
-  client.login(token).catch(errorHandler);
+  dcAgent.login(token).catch(errorHandler);
 };
 
-export default bot;
+export default dcAgent;

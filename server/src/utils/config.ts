@@ -5,6 +5,7 @@ dotenv.config();
 const envMode = process.env.NODE_ENV || 'development';
 const expressPort = process.env.PORT || 3000;
 const discordToken = process.env.DISCORD_TOKEN;
+const discordAdminUserId = process.env.DISCORD_ADMIN_USER_ID;
 
 const igUser = process.env.IG_USERNAME;
 const igPass = process.env.IG_PASSWORD;
@@ -62,4 +63,12 @@ const parseProxyUrl = () => {
 
 const proxyUrl = parseProxyUrl();
 
-export { envMode, expressPort, discordToken, igCredentials, proxy, proxyUrl };
+export {
+  envMode,
+  expressPort,
+  discordToken,
+  discordAdminUserId,
+  igCredentials,
+  proxy,
+  proxyUrl,
+};
