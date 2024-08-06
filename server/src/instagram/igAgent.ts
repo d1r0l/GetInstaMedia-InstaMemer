@@ -1,8 +1,8 @@
-import { igApiClientExtended } from './agent/igApiClientExtended';
+import { IgApiClientExtended } from './agent/IgApiClientExtended';
 import { igCredentials, proxyUrl } from '../utils/config';
 import errorHandler from '../utils/errorHandler';
 
-const igAgent = new igApiClientExtended();
+const igAgent = new IgApiClientExtended();
 
 const login = async () => {
   if (!igCredentials)
@@ -37,25 +37,13 @@ const login = async () => {
     },
   });
 
-  const sessionMaintaining = () => {
-    setTimeout(
-      () => {
-        igAgent.account.currentUser().catch(errorHandler);
-        sessionMaintaining();
-      },
-      (30 + 30 * Math.random()) * 60 * 1000,
-    );
-  };
-
-  sessionMaintaining();
+  igAgent.session.maintain();
 };
 
 /**
- * Executes the login process and handles any errors that occur.
- *
- * @return {Promise<void>} A promise that resolves when the login process is complete.
+ * Initializes and starts a Instagram client.
  */
-const igAgentStart = () => {
+const igAgentStart = (): void => {
   login().catch(errorHandler);
 };
 

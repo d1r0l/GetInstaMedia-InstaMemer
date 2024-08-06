@@ -126,22 +126,22 @@ export class Session extends Repository {
   private isSaveExists =
     fs.existsSync(this.sessionDirPath) && fs.existsSync(this.sessionPath);
 
-  private saveRoutine = async () => {
+  private async saveRoutine() {
     this.isSavingCurrently = true;
     if (!fs.existsSync(this.sessionDirPath)) fs.mkdirSync(this.sessionDirPath);
     const sessionData = (await this.client.state.serialize()) as SessionData;
     if ('constants' in sessionData) delete sessionData.constants;
     fs.writeFileSync(this.sessionPath, JSON.stringify(sessionData), 'utf-8');
-  };
+  }
 
-  public save = () => {
+  public save() {
     if (this.isSavingCurrently) return;
     this.saveRoutine()
       .catch(() => console.log('Session saving failed'))
       .finally(() => (this.isSavingCurrently = false));
-  };
+  }
 
-  public load = async () => {
+  public async load() {
     if (!this.isSaveExists) {
       console.log('Session not found');
       return;
@@ -163,13 +163,26 @@ export class Session extends Repository {
       sessionData.passwordEncryptionPubKey;
     this.client.state.authorization = sessionData.authorization;
     console.log('Session loaded successfully');
-  };
+  }
 
-  public clear = async () => {
+  public async clear() {
     await this.client.state.deserialize({});
     delete this.client.state.igWWWClaim;
     delete this.client.state.passwordEncryptionKeyId;
     delete this.client.state.passwordEncryptionPubKey;
     delete this.client.state.authorization;
-  };
+  }
+
+  public maintain() {
+    setTimeout(
+      () => {
+        this.client.discover.topicalExplore().catch((error) => {
+          if (!(error instanceof Error && error.name === 'IgCheckpointError'))
+            this.maintain();
+          throw error;
+        });
+      },
+      (150 + 30 * Math.random()) * 60 * 1000,
+    );
+  }
 }
