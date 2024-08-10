@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
-import errorHandler from '../../utils/errorHandler';
+import globalErrorHandler from '../../utils/globalErrorHandler';
 
-const errors = (
+const errorHandler = (
   err: Error,
   _req: Request,
   res: Response,
   _next: NextFunction,
 ): void => {
-  errorHandler(err);
   res.status(500).json({ error: 'Internal Server Error' });
+  globalErrorHandler(err);
 };
 
-export default errors;
+export default errorHandler;

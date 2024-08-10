@@ -1,5 +1,5 @@
 import axios from 'axios';
-import errorHandler from './errorHandler';
+import globalErrorHandler from './globalErrorHandler';
 import { envMode } from './config';
 import { proxy } from './config';
 
@@ -30,7 +30,7 @@ const startupLogger = () => {
         `Connected from ${resData.ip} (${resData.cc}: ${resData.country})`,
       );
     })
-    .catch(errorHandler);
+    .catch(globalErrorHandler);
 };
 
 export default startupLogger;

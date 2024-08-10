@@ -2,6 +2,13 @@ import type MediaInfoResponseItems from './igPostDataType';
 import axios from 'axios';
 import { isString } from 'lodash';
 
+/**
+ * Selects the media URLs from the given MediaItems that have a size within the specified maximum size.
+ *
+ * @param {MediaInfoResponseItems[]} MediaItems - The media items to select from.
+ * @param {number} [maxSize] - The maximum size of the media in bytes. If not specified, no size limit is applied.
+ * @return {Promise<string[]>} A promise that resolves to an array of media URLs that meet the size criteria.
+ */
 const igMediaSizeSelector = async (
   MediaItems: MediaInfoResponseItems[],
   maxSize?: number,
