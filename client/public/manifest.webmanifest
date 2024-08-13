@@ -1,0 +1,73 @@
+{
+  "short_name": "GetInstaMedia",
+  "name": "GetInstaMedia",
+  "icons": [
+    {
+      "src": "/icon-maskable.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/icon192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "id": "/?source=pwa",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "scope": "/",
+  "description": "An application for downloading media content from Instagram posts",
+  "background_color": "#f0f0f0",
+  "theme_color": "#eb93bb",
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Homescreen of GetInstaMedia App"
+    },
+    {
+      "src": "/screenshots/desktop-2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Screen of post with two images loaded in GetInstaMedia App"
+    },
+    {
+      "src": "/screenshots/desktop-3.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Image prewiew of GetInstaMedia App"
+    },
+    {
+      "src": "/screenshots/mobile-1.png",
+      "sizes": "269x583",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Homescreen of GetInstaMedia App"
+    },
+    {
+      "src": "/screenshots/mobile-2.png",
+      "sizes": "269x583",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Screen of post with one image loaded in GetInstaMedia App"
+    },
+    {
+      "src": "/screenshots/mobile-3.png",
+      "sizes": "269x583",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Screen of post with two images loaded in GetInstaMedia App"
+    }
+  ]
+}

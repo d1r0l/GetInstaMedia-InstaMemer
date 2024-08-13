@@ -4,12 +4,12 @@
 /*.pnp.js
 
 # testing
-/coverage
+*/coverage
 
-# development
-**/build
+# production & development
 /server/client
 /oldVersions
+**/build
 **/errors
 
 # misc
@@ -25,10 +25,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# cookies & certs
+# cookies
 **/cookies
 **/certs
+**/session
 
-# templates
-/template
+# misc
+**/template
 **/temp
+**/errors

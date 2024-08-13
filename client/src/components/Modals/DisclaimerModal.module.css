@@ -1,0 +1,46 @@
+.container {
+  width: 70dvw;
+  max-width: 1000px;
+  position: relative;
+  max-height: var(--content-height);
+}
+
+.title {
+  padding: 2rem;
+}
+
+.content {
+  padding-inline: 1.6rem;
+  margin-inline: 0.4rem;
+  box-sizing: content-box;
+  max-height: calc(var(--content-height) - 4rem);
+  overflow: auto;
+}
+
+.content > p {
+  padding-bottom: 1em;
+  text-align: justify;
+  line-height: 1.2;
+}
+
+@media (max-width: 700px) {
+  .title {
+    padding: 1rem;
+  }
+
+  .content {
+    padding-inline: 0.8rem;
+    margin-inline: 0.2rem;
+  }
+
+  .container {
+    width: auto;
+  }
+}
+
+@media (max-width: 356px) {
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
