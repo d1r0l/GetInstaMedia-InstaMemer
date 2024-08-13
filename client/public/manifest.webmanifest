@@ -24,6 +24,8 @@
   "display": "standalone",
   "scope": "/",
   "description": "An application for downloading media content from Instagram posts",
+  "background_color": "#f0f0f0",
+  "theme_color": "#eb93bb",
   "screenshots": [
     {
       "src": "/screenshots/desktop-1.png",

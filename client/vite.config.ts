@@ -14,7 +14,8 @@ export default ({ mode }) => {
     ],
     base: process.env.VITE_BASE_URL || '/',
     build: {
-      outDir: 'build'
+      outDir: 'build',
+      manifest: 'manifest.webmanifest'
     },
     server: {
       port: 3001,

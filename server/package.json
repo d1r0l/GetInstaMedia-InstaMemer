@@ -9,7 +9,7 @@
     "dev:full": "concurrently \"npm run dev\" \"cd ../client && npm run dev\"",
     "lint": "eslint --ext .ts .",
     "build": "tsc",
-    "build:full": "rm -rf client/* && cd ../client && npm run build && cp -rf build/* ../server/client/ && cd ../server && tsc",
+    "build:full": "rm -rf client/* && mkdir client && cd ../client && npm run build && cp -rf build/* ../server/client/ && cd ../server && tsc",
     "deploy": "npm run build:full && fly deploy"
   },
   "dependencies": {
