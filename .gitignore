@@ -29,6 +29,7 @@ yarn-error.log*
 */session
 
 # misc
-**/errors
 /certs
+/template
+**/errors
 */temp
