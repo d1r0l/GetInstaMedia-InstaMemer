@@ -30,7 +30,7 @@ The application is composed of four main components, each serving a specific rol
 
 - **[Express](https://expressjs.com/)**: A minimal and flexible Node.js web application framework for building robust APIs.
 - **[Discord.js](https://github.com/discordjs/discord.js)**: A powerful library for interacting with the Discord API, enabling the creation of bots and other integrations.
-- **[Instagram Private API](https://github.com/instagram-private-api/instagram-private-api)**: A reverse-engineered API for interacting with Instagram, allowing advanced functionalities like session management and media retrieval.
+- **[Instagram Private API](https://github.com/dilame/instagram-private-api)**: A reverse-engineered API for interacting with Instagram, allowing advanced functionalities like session management and media retrieval.
 - **[Axios](https://github.com/axios/axios)**: Used here as well for server-side HTTP requests.
 - **[Lodash](https://lodash.com/)**: Used on the server for efficient data manipulation.
 - **[Nanoid](https://github.com/ai/nanoid)**: A tiny, secure URL-friendly unique ID generator.
