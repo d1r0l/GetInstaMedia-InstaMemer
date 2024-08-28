@@ -1,0 +1,46 @@
+PolyForm Noncommercial License 1.0.0
+
+This license allows you to use and share this software
+for noncommercial purposes, but you cannot use, modify,
+or distribute it for commercial purposes.
+
+Licensor: Roshkovan Dmitrii
+
+Software: GetInstaMedia-InstaMemer
+
+Effective Date: August 28, 2024
+
+1. **Grant of Rights**: Subject to the terms and conditions
+of this license, the Licensor grants you a nonexclusive,
+nontransferable, non-sublicensable, worldwide, royalty-free,
+limited right to use and share the Software solely
+for noncommercial purposes.
+
+2. **Conditions**:
+    2.1 **No Modification**: You may not modify, create 
+    derivative works of, or alter the Software in any way.
+    2.2 **No Distribution**: You may not distribute, sublicense,
+    or convey copies of the Software or any part thereof
+    to others.
+    2.3 **Noncommercial Use**: You may use the Software only
+    for purposes that are not primarily intended for or directed
+    towards commercial advantage or monetary compensation.
+
+3. **Termination**:
+    3.1 This license automatically terminates if you violate
+    any of its terms.
+    3.2 Upon termination, you must cease all use and delete
+    all copies of the Software.
+
+4. **Disclaimer of Warranty**: The Software is provided "as-is"
+without warranties of any kind, express or implied, including
+but not limited to any warranties of merchantability, fitness
+for a particular purpose, or non-infringement.
+
+5. **Limitation of Liability**: In no event will the Licensor
+be liable for any damages arising from the use or inability
+to use the Software, even if the Licensor has been advised
+of the possibility of such damages.
+
+For more information, please visit
+https://polyformproject.org/licenses/noncommercial/1.0.0/
